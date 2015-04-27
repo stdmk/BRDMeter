@@ -3,8 +3,6 @@ package com.brdmeter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +18,11 @@ public class MainActivity extends Activity {
     int bufTime = 0;           //счётчик секунд
     float totalMoney = 0;        //всего денег
     float bufMoney = 0;          //счётчик копеек
-    int salary = 23000;            //зарплата
-    int countDayInMonth = 30;      //рабочих дней в месяце
-    int countHoursIntDay = 8;      //рабочих часов в день
-    float kostylInMoney = 0;         //костыль, необходимый для верного подсчёта денег
+    float salary = 23000;            //зарплата
+    float countDayInMonth = 30;      //рабочих дней в месяце
+    float countHoursIntDay = 8;      //рабочих часов в день
+    float tickInMoney = 0;         //денег в секунду
+    int tickCorrector = 0;          //коррекция счётчика хронометра
 
 
     @Override
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
         Chrome1.setBase(SystemClock.elapsedRealtime());         //сброс времени(на всякий)
         Chrome1.stop();
 
-        kostylInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;
+        tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
 
         BtnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
@@ -58,10 +57,8 @@ public class MainActivity extends Activity {
         BtnStop.setOnClickListener(new OnClickListener() {              //Кнопка стоп
             @Override
             public void onClick(View v) {
-                bufTime = bufTime - 2;
-                totalTime = totalTime + bufTime;
-                bufMoney = bufMoney - kostylInMoney * 2;
-                totalMoney = totalMoney + bufMoney;
+                totalTime = totalTime + bufTime;    //всего времени подсчёт
+                totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
 
                 Chrome1.setBase(SystemClock.elapsedRealtime());
                 Chrome1.stop();
@@ -70,30 +67,25 @@ public class MainActivity extends Activity {
                 TextMoneyCounter.clearComposingText();
 
                 TextTotalTime.setText("Всего времени: "+String.valueOf(totalTime));
-                TextTotalMoney.setText("Всего денег: " + String.valueOf(totalMoney));
+                TextTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
+                TextMoneyCounter.setText("0.0");
 
                 bufTime = 0;
+                bufMoney = 0;
+                tickCorrector = 0;
             }
         });
 
-        Chrome1.addTextChangedListener(new TextWatcher() {
+        Chrome1.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onChronometerTick(Chronometer chronometer) {
+                if (tickCorrector > 1) {
+                    bufTime = bufTime + 1;      //увеличиваются секунды
+                    bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                bufTime = bufTime + 1;      //увеличиваются секунды
-                bufMoney = bufMoney + kostylInMoney;    //увеличиваются копейки
-
-                TextMoneyCounter.setText(String.format("%.2f", bufMoney));     //отображается увеличение копеек
+                    TextMoneyCounter.setText(String.format("%.2f", bufMoney));     //отображается увеличение копеек
+                }
+                tickCorrector = tickCorrector + 1;
             }
         });
     }
