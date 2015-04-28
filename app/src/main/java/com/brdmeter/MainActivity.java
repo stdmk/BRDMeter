@@ -27,9 +27,9 @@ public class MainActivity extends Activity {
     int tickCorrector = 0;          //коррекция счётчика хронометра
     boolean btnStopPressed = false;   //нажата ли кнопка Стоп
 
-    public static final String PREFERENCE = "preference2";       //имя файла настроек
-    public static final String PREFERENCE_TOTAL_TIME = null;    //параметр настроек Всего времени
-    public static final String PREFERENCE_TOTAL_MONEY = null;   //параметр настроек Всего денег
+    public static final String PREFERENCE = "preference6";       //имя файла настроек
+    public final String PREFERENCE_TOTAL_TIME = "0";    //параметр настроек Всего времени
+    public final String PREFERENCE_TOTAL_MONEY = "";   //параметр настроек Всего денег
 
     private SharedPreferences setting;
 
@@ -45,17 +45,14 @@ public class MainActivity extends Activity {
         final TextView TextTotalMoney = (TextView)findViewById(R.id.textView2);
         final TextView TextMoneyCounter = (TextView)findViewById(R.id.textView3);
 
-        setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
-        if (setting.contains(PREFERENCE_TOTAL_MONEY) || setting.contains(PREFERENCE_TOTAL_TIME))
+        setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
+        if (setting.contains(PREFERENCE_TOTAL_MONEY) || setting.contains(PREFERENCE_TOTAL_TIME))    //проверяем есть ли они там
         {
-            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
-            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
+            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);       //получаем
+            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);   //данные
+            TextTotalTime.setText("Всего времени: "+String.valueOf(totalTime));
+            TextTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
         }
-        else
-        {
-            TextTotalMoney.setText("Чот не так с настройками");
-        }
-
 
         BtnStop.setEnabled(false);
         Chrome1.setBase(SystemClock.elapsedRealtime());         //сброс времени(на всякий)
@@ -63,21 +60,25 @@ public class MainActivity extends Activity {
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
 
+        //КНОПКА СТАРТ
+
         BtnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
             public void onClick(View v) {
                 Chrome1.setBase(SystemClock.elapsedRealtime());
                 Chrome1.start();
-                btnStopPressed = false;
+                btnStopPressed = false;     //кнопка стоп не нажата, подсчёт идёт, данные сохранять не надо
                 BtnStart.setEnabled(false);
                 BtnStop.setEnabled(true);
             }
         });
 
+        //КНОПКА СТОП
+
         BtnStop.setOnClickListener(new OnClickListener() {              //Кнопка стоп
             @Override
             public void onClick(View v) {
-                btnStopPressed = true;
+                btnStopPressed = true;      //кнопка стоп нажата, подсчёт не идёт, данные сохранятся
                 totalTime = totalTime + bufTime;    //всего времени подсчёт
                 totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
 
@@ -85,7 +86,6 @@ public class MainActivity extends Activity {
                 Chrome1.stop();
                 BtnStart.setEnabled(true);
                 BtnStop.setEnabled(false);
-                TextMoneyCounter.clearComposingText();
 
                 TextTotalTime.setText("Всего времени: "+String.valueOf(totalTime));
                 TextTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
@@ -94,8 +94,16 @@ public class MainActivity extends Activity {
                 bufTime = 0;
                 bufMoney = 0;
                 tickCorrector = 0;
+                if (btnStopPressed) {       //запись данных
+                    SharedPreferences.Editor edit = setting.edit();
+                    edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);      //кладём
+                    edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);  //данные
+                    edit.apply();       //запись
+                }
             }
         });
+
+        //ТИКАНЬЕ ХРОНОМЕТРА
 
         Chrome1.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -113,6 +121,8 @@ public class MainActivity extends Activity {
         });
     }
 
+    //СВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -123,6 +133,8 @@ public class MainActivity extends Activity {
             edit.apply();
         }
     }
+
+    //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
 
     @Override
     protected  void onResume() {
