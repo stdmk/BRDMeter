@@ -29,13 +29,13 @@ public class MainActivity extends Activity {
     boolean btnStopPressed = false;   //нажата ли кнопка Стоп
 
     public static final String PREFERENCE = "preference6";       //имя файла настроек
-    public final String PREFERENCE_TOTAL_TIME = "0";             //параметр настроек Всего времени
-    public final String PREFERENCE_TOTAL_MONEY = "0";            //параметр настроек Всего денег
-    public final String PREFERENCE_WORKDAY_BEGIN = "0";          //время начала рабочего дня
-    public final String PREFERENCE_WORKDAY_END = "0";            //время конца рабочего дня
-    public final String PREFERENCE_LUNCH_BEGIN = "0";            //время начала обеда
-    public final String PREFERENCE_LUNCH_END = "0";              //время конца обеда
-    public final String PREFERENCE_SALARY = "0";
+    public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
+    public final String PREFERENCE_TOTAL_MONEY = "totalmoney";            //параметр настроек Всего денег
+    public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
+    public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
+    public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
+    public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
+    public final String PREFERENCE_SALARY = "salary";
 
     private SharedPreferences setting;
 
@@ -60,10 +60,10 @@ public class MainActivity extends Activity {
             totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);   //данные
             textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
             textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
-        } else {
+        }
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
-        }
+
 
 
         btnStop.setEnabled(false);
@@ -106,12 +106,7 @@ public class MainActivity extends Activity {
                 bufTime = 0;
                 bufMoney = 0;
                 tickCorrector = 0;
-                if (btnStopPressed) {       //запись данных
-                    SharedPreferences.Editor edit = setting.edit();
-                    edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);      //кладём
-                    edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);  //данные
-                    edit.apply();       //запись
-                }
+                saveTotalData();
             }
         });
 
@@ -137,12 +132,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (btnStopPressed) {
-            SharedPreferences.Editor edit = setting.edit();
-            edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
-            edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
-            edit.apply();
-        }
+        saveTotalData();
     }
 
     //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
@@ -150,10 +140,15 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (btnStopPressed) {
-            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
-            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
-        }
+    }
+
+    //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
+
+    public void saveTotalData(){
+        SharedPreferences.Editor edit = setting.edit();
+        edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
+        edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
+        edit.apply();
     }
 
 
