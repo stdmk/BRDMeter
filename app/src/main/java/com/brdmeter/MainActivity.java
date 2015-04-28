@@ -1,6 +1,8 @@
 package com.brdmeter;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Menu;
@@ -23,7 +25,13 @@ public class MainActivity extends Activity {
     float countHoursIntDay = 8;      //рабочих часов в день
     float tickInMoney = 0;         //денег в секунду
     int tickCorrector = 0;          //коррекция счётчика хронометра
+    boolean btnStopPressed = false;   //нажата ли кнопка Стоп
 
+    public static final String PREFERENCE = "preference2";       //имя файла настроек
+    public static final String PREFERENCE_TOTAL_TIME = null;    //параметр настроек Всего времени
+    public static final String PREFERENCE_TOTAL_MONEY = null;   //параметр настроек Всего денег
+
+    private SharedPreferences setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,17 @@ public class MainActivity extends Activity {
         final TextView TextTotalMoney = (TextView)findViewById(R.id.textView2);
         final TextView TextMoneyCounter = (TextView)findViewById(R.id.textView3);
 
+        setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+        if (setting.contains(PREFERENCE_TOTAL_MONEY) || setting.contains(PREFERENCE_TOTAL_TIME))
+        {
+            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
+            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
+        }
+        else
+        {
+            TextTotalMoney.setText("Чот не так с настройками");
+        }
+
 
         BtnStop.setEnabled(false);
         Chrome1.setBase(SystemClock.elapsedRealtime());         //сброс времени(на всякий)
@@ -49,6 +68,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Chrome1.setBase(SystemClock.elapsedRealtime());
                 Chrome1.start();
+                btnStopPressed = false;
                 BtnStart.setEnabled(false);
                 BtnStop.setEnabled(true);
             }
@@ -57,6 +77,7 @@ public class MainActivity extends Activity {
         BtnStop.setOnClickListener(new OnClickListener() {              //Кнопка стоп
             @Override
             public void onClick(View v) {
+                btnStopPressed = true;
                 totalTime = totalTime + bufTime;    //всего времени подсчёт
                 totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
 
@@ -85,9 +106,31 @@ public class MainActivity extends Activity {
 
                     TextMoneyCounter.setText(String.format("%.2f", bufMoney));     //отображается увеличение копеек
                 }
-                tickCorrector = tickCorrector + 1;
+                else {
+                    tickCorrector = tickCorrector + 1;
+                }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (btnStopPressed) {
+            SharedPreferences.Editor edit = setting.edit();
+            edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
+            edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
+            edit.apply();
+        }
+    }
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        if (btnStopPressed) {
+            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
+            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
+        }
     }
 
 
