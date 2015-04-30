@@ -4,4 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_setting">Настройки</string>
+    <string name="WorkDayBegin">Начало рабочего дня</string>
+    <string name="WorkDayEnd">Конец рабочего дня</string>
+    <string name="LunchBegin">Начало обеда</string>
+    <string name="LunchEnd">Конец обеда</string>
+    <string name="Salary">Введите размер зарплаты в рублях</string>
+    <string name="ExampleSalary">10000</string>
 </resources>

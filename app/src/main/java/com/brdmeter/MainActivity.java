@@ -27,6 +27,10 @@ public class MainActivity extends Activity {
     float tickInMoney = 0;         //денег в секунду
     int tickCorrector = 0;          //коррекция счётчика хронометра
     boolean btnStopPressed = false;   //нажата ли кнопка Стоп
+    int workDayBegin;
+    int workDayEnd;
+    int lunchBegin;
+    int lunchEnd;
 
     public static final String PREFERENCE = "preference6";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
@@ -35,7 +39,7 @@ public class MainActivity extends Activity {
     public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
     public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
-    public final String PREFERENCE_SALARY = "salary";
+    public final String PREFERENCE_SALARY = "salary";                     //зарплата
 
     private SharedPreferences setting;
 
@@ -52,19 +56,21 @@ public class MainActivity extends Activity {
         final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
-        if (setting.contains(PREFERENCE_TOTAL_MONEY) || setting.contains(PREFERENCE_TOTAL_TIME) ||  //проверяем есть ли они там
-                setting.contains(PREFERENCE_WORKDAY_BEGIN) || setting.contains(PREFERENCE_WORKDAY_END) ||
-                setting.contains(PREFERENCE_LUNCH_BEGIN) || setting.contains(PREFERENCE_LUNCH_END) ||
-                setting.contains(PREFERENCE_SALARY)) {
-            totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);       //получаем
-            totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);   //данные
+        totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
+        totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
+        workDayBegin = setting.getInt(PREFERENCE_WORKDAY_BEGIN, 0);         //берём настройки из файла
+        workDayEnd = setting.getInt(PREFERENCE_WORKDAY_END, 0);
+        lunchBegin = setting.getInt(PREFERENCE_LUNCH_BEGIN, 0);
+        lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
+        salary = setting.getFloat(PREFERENCE_SALARY, 0);
+
+        if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
             textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
             textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
-        }
-            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+        } else {
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
-
-
+        }
 
         btnStop.setEnabled(false);
         chrome1.setBase(SystemClock.elapsedRealtime());         //сброс времени(на всякий)
@@ -106,7 +112,7 @@ public class MainActivity extends Activity {
                 bufTime = 0;
                 bufMoney = 0;
                 tickCorrector = 0;
-                saveTotalData();
+                SaveTotalData();
             }
         });
 
@@ -132,7 +138,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveTotalData();
+        SaveTotalData();
     }
 
     //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
@@ -144,7 +150,7 @@ public class MainActivity extends Activity {
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
 
-    public void saveTotalData(){
+    public void SaveTotalData(){
         SharedPreferences.Editor edit = setting.edit();
         edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
         edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
