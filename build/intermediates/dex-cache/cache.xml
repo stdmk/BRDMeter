@@ -2,32 +2,11 @@
 <items version="2" >
 
     <item
-        jar="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.0\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="eeebabdfd8203f6ab639ccea4ffa1f20e1adee3a">
-        <dex dex="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\pre-dexed\debug\classes-f5340efe1b430506d4dac5fc0a0e4ed4046ed9e5.jar" />
-    </item>
-    <item
         jar="D:\github\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
         <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\classes-fde71b09fe6f4d2ce93ba0c55c05176307fec11c.jar" />
-    </item>
-    <item
-        jar="D:\github\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-8d1499f345823ea1ac434148f98bfafd446fbaae.jar" />
-    </item>
-    <item
-        jar="C:\Users\Дмитрий\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-cb4a9623097029e2061e00cfeed9cc96d06864b9.jar" />
     </item>
     <item
         jar="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.0\classes.jar"
@@ -37,11 +16,32 @@
         <dex dex="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\pre-dexed\debug\classes-cf459a5ae828d5f5a4ff3592dc84f0cc2b919f73.jar" />
     </item>
     <item
+        jar="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="eeebabdfd8203f6ab639ccea4ffa1f20e1adee3a">
+        <dex dex="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\pre-dexed\debug\classes-f5340efe1b430506d4dac5fc0a0e4ed4046ed9e5.jar" />
+    </item>
+    <item
+        jar="C:\Users\special\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.1.1\support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\support-annotations-22.1.1-c838c3b4a00c2984a647cc5271049c4dda6c37c8.jar" />
+    </item>
+    <item
         jar="D:\github\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.1.1\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
         <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\classes-e6da2a64cd128a4596f5f6b0527a092c7916e466.jar" />
+    </item>
+    <item
+        jar="D:\github\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.1\libs\internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="D:\github\BRDMeter\app\build\intermediates\pre-dexed\debug\internal_impl-22.1.1-8d1499f345823ea1ac434148f98bfafd446fbaae.jar" />
     </item>
     <item
         jar="D:\Dropbox\Файлы\кодинг\brdmeter and\BRDMeter\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.1.0\libs\internal_impl-22.1.0.jar"

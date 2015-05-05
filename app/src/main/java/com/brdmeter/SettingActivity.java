@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class SettingActivity extends Activity {
 
         final TextView textView = (TextView)findViewById(R.id.textView5);
         final Button btnSave = (Button)findViewById(R.id.btnSave);
+        final Button btnBack = (Button)findViewById(R.id.btnBack);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
 
@@ -46,6 +48,8 @@ public class SettingActivity extends Activity {
         timePicker.setCurrentMinute(0);         //значение
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+
+        btnBack.setEnabled(false);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +65,7 @@ public class SettingActivity extends Activity {
                     textView.setText(getString(R.string.WorkDayEnd));   //меняем текст
                     timePicker.setCurrentHour(17);      //ставим таймпикер на следующее положение
                     timePicker.setCurrentMinute(0);    //дальше всё аналогично
+                    btnBack.setEnabled(true);
                     return;
                 }
 
@@ -97,6 +102,9 @@ public class SettingActivity extends Activity {
                     textView.setText(getString(R.string.Salary));
                     timePicker.setVisibility(View.INVISIBLE);       //убираем выбор времени и ставим эдит текст
                     editText.setVisibility(View.VISIBLE);           //дальше вводится зарплата
+                    editText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);   //программный вызов
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);                                         //клавиатуры
                     return;
                 }
 
@@ -107,6 +115,41 @@ public class SettingActivity extends Activity {
                     SaveTotalData();    //введены последние необходимые данные, сохраняем
                     Intent intent = new Intent(SettingActivity.this, MainActivity.class);
                     startActivity(intent);      //переходим на главное окно
+                }
+            }
+        });
+
+        // КНОПКА НАЗАД
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
+
+                if (textView.getText() == getString(R.string.WorkDayEnd)) {
+                    textView.setText(getString(R.string.WorkDayBegin));
+                    btnBack.setEnabled(false);
+                }
+
+                //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
+
+                if (textView.getText() == getString(R.string.LunchBegin)) {
+                    textView.setText(getString(R.string.WorkDayEnd));
+                }
+
+                //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
+
+                if (textView.getText() == getString(R.string.LunchEnd)){
+                    textView.setText(getString(R.string.LunchBegin));
+                }
+
+                //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К КОНЦУ ОБЕДА)
+
+                if (textView.getText() == getString(R.string.Salary)) {
+                    textView.setText(getString(R.string.LunchEnd));
+                    editText.setVisibility(View.INVISIBLE);
+                    timePicker.setVisibility(View.VISIBLE);
                 }
             }
         });
