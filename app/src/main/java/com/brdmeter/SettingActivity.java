@@ -119,41 +119,50 @@ public class SettingActivity extends Activity {
             }
         });
 
-        // КНОПКА НАЗАД
+    }
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    //ОБРАБОТКА КЛАВИШИ НАЗАД
 
-                //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
+    public void onBackPressed() {
+        final TextView textView = (TextView)findViewById(R.id.textView5);
+        final Button btnBack = (Button)findViewById(R.id.btnBack);
+        final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+        final EditText editText = (EditText)findViewById(R.id.editText);
 
-                if (textView.getText() == getString(R.string.WorkDayEnd)) {
-                    textView.setText(getString(R.string.WorkDayBegin));
-                    btnBack.setEnabled(false);
-                }
+        //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
 
-                //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
+        if (textView.getText() == getString(R.string.WorkDayEnd)) {
+            textView.setText(getString(R.string.WorkDayBegin));
+            timePicker.setCurrentHour(8);
+            timePicker.setCurrentMinute(0);
+            btnBack.setEnabled(false);
+        }
 
-                if (textView.getText() == getString(R.string.LunchBegin)) {
-                    textView.setText(getString(R.string.WorkDayEnd));
-                }
+        //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
 
-                //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
+        if (textView.getText() == getString(R.string.LunchBegin)) {
+            textView.setText(getString(R.string.WorkDayEnd));
+            timePicker.setCurrentHour(17);
+            timePicker.setCurrentMinute(0);
+        }
 
-                if (textView.getText() == getString(R.string.LunchEnd)){
-                    textView.setText(getString(R.string.LunchBegin));
-                }
+        //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
 
-                //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К КОНЦУ ОБЕДА)
+        if (textView.getText() == getString(R.string.LunchEnd)){
+            textView.setText(getString(R.string.LunchBegin));
+            timePicker.setCurrentHour(13);
+            timePicker.setCurrentMinute(0);
+        }
 
-                if (textView.getText() == getString(R.string.Salary)) {
-                    textView.setText(getString(R.string.LunchEnd));
-                    editText.setVisibility(View.INVISIBLE);
-                    timePicker.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К КОНЦУ ОБЕДА)
 
+        if (textView.getText() == getString(R.string.Salary)) {
+            textView.setText(getString(R.string.LunchEnd));
+            timePicker.setCurrentHour(14);
+            timePicker.setCurrentMinute(0);
+            editText.setVisibility(View.INVISIBLE);
+            timePicker.setVisibility(View.VISIBLE);
+        }
     }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ

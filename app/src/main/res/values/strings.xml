@@ -10,4 +10,6 @@
     <string name="LunchEnd">Конец обеда</string>
     <string name="Salary">Введите размер зарплаты в рублях</string>
     <string name="ExampleSalary">10000</string>
+    
+    <string name="btnBack">Назад</string>
 </resources>
