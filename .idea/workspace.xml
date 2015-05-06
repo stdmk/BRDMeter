@@ -33,9 +33,6 @@
     <list default="true" id="4050a592-fe00-4d1f-8390-ee2ab92c0de6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BRDMeter.iws" />
@@ -1292,7 +1289,13 @@
       <option name="project" value="LOCAL" />
       <updated>1430828380334</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Энергосберегающий режим(пока неудачно)">
+      <created>1430910781418</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1430910781418</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1356,7 +1359,8 @@
     <MESSAGE value="Попытка добавления экрана настроек(неудачная)" />
     <MESSAGE value="В настройки добавлена возможность вернуться назад + приложение перестало запускаться о_О" />
     <MESSAGE value="Починено приложение, убрана кнопка Назад, теперь её задачи выполняет системная клавиша назад" />
-    <option name="LAST_COMMIT_MESSAGE" value="Починено приложение, убрана кнопка Назад, теперь её задачи выполняет системная клавиша назад" />
+    <MESSAGE value="Энергосберегающий режим(пока неудачно)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Энергосберегающий режим(пока неудачно)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
