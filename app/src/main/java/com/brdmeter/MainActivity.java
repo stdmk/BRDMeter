@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+
     int totalTime = 0;         //всего времени
     int bufTime = 0;           //счётчик секунд
     float totalMoney = 0;        //всего денег
@@ -27,12 +28,15 @@ public class MainActivity extends Activity {
     float tickInMoney = 0;         //денег в секунду
     int tickCorrector = 0;          //коррекция счётчика хронометра
     boolean btnStopPressed = false;   //нажата ли кнопка Стоп
-    int workDayBegin;
-    int workDayEnd;
-    int lunchBegin;
-    int lunchEnd;
+    int workDayBegin;               //время начала рабочего дня (в секундах)
+    int workDayEnd;                 //время конца рабочего дня (в секундах)
+    int lunchBegin;                 //время начала обеда(в секундах)
+    int lunchEnd;                   //время конца обеда(в секундах)
+    float tempMoney;                //временные деньги (необходимо, если приложение было свёрнуто)
+    int tempTime;                   //временное время о_О (необходимо по той же причине)
+    long tempChrome1;               //положение хронометра перед сворачиванием
 
-    public static final String PREFERENCE = "preference6";       //имя файла настроек
+    public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
     public final String PREFERENCE_TOTAL_MONEY = "totalmoney";            //параметр настроек Всего денег
     public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
@@ -40,6 +44,9 @@ public class MainActivity extends Activity {
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
     public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
+    public final String PREFERENCE_TEMP_TIME = "temptime";                //временное время
+    public final String PREFERENCE_TEMP_MONEY = "tempmoney";              //временные деньги(когда приложение сворачивается)
+    public final String PREFERENCE_TEMP_CHROME1 = "tempchrome1";          //временное положение хронометра
 
     private SharedPreferences setting;
 
@@ -63,6 +70,9 @@ public class MainActivity extends Activity {
         lunchBegin = setting.getInt(PREFERENCE_LUNCH_BEGIN, 0);
         lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
+        tempTime = setting.getInt(PREFERENCE_TEMP_TIME, 0);
+        tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+        tempChrome1 = setting.getLong(PREFERENCE_TEMP_CHROME1, 0);
 
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
             textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
@@ -72,8 +82,15 @@ public class MainActivity extends Activity {
             startActivity(intent);
         }
 
+        if (tempMoney != 0) {
+            chrome1.setBase(setting.getLong(PREFERENCE_TEMP_TIME, 0));
+            totalMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+
+
+            textTotalMoney.setText("Всего времени: " + String.format("%.2f", totalMoney));
+        }
+
         btnStop.setEnabled(false);
-        chrome1.setBase(SystemClock.elapsedRealtime());         //сброс времени(на всякий)
         chrome1.stop();
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
@@ -83,7 +100,7 @@ public class MainActivity extends Activity {
         btnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
             public void onClick(View v) {
-                chrome1.setBase(SystemClock.elapsedRealtime());
+                chrome1.setBase(SystemClock.elapsedRealtime()+tempTime);
                 chrome1.start();
                 btnStopPressed = false;     //кнопка стоп не нажата, подсчёт идёт, данные сохранять не надо
                 btnStart.setEnabled(false);
@@ -138,7 +155,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        SaveTotalData();
+        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
+
+        chrome1.stop();
+        SaveTempData();
+
+        finish();
     }
 
     //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
@@ -147,6 +169,17 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
     }
+    //НАЖАТИЕ КНОПКИ НАЗАД
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
+
+        chrome1.stop();
+        SaveTempData();
+
+        finish();
+    }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
 
@@ -154,6 +187,21 @@ public class MainActivity extends Activity {
         SharedPreferences.Editor edit = setting.edit();
         edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
         edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
+        edit.putInt(PREFERENCE_TEMP_TIME, 0);
+        edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
+        edit.putLong(PREFERENCE_TEMP_CHROME1, 0);
+        edit.apply();
+    }
+
+    //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ФАЙЛОВ
+
+    public void SaveTempData () {
+        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
+
+        SharedPreferences.Editor edit = setting.edit();
+        edit.putInt(PREFERENCE_TEMP_TIME, bufTime);
+        edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
+        edit.putLong(PREFERENCE_TEMP_CHROME1, chrome1.getBase());
         edit.apply();
     }
 

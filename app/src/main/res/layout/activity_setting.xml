@@ -55,13 +55,4 @@
         android:visibility="invisible"
         android:text="@string/ExampleSalary" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnBack"
-        android:id="@+id/btnBack"
-        android:layout_alignTop="@+id/btnSave"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
 </RelativeLayout>

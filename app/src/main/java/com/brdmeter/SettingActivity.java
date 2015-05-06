@@ -19,7 +19,7 @@ public class SettingActivity extends Activity {
 
     private SharedPreferences setting;
 
-    public static final String PREFERENCE = "preference6";                  //имя файла настроек
+    public static final String PREFERENCE = "preference";                  //имя файла настроек
     public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
     public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
@@ -39,7 +39,6 @@ public class SettingActivity extends Activity {
 
         final TextView textView = (TextView)findViewById(R.id.textView5);
         final Button btnSave = (Button)findViewById(R.id.btnSave);
-        final Button btnBack = (Button)findViewById(R.id.btnBack);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
 
@@ -48,8 +47,6 @@ public class SettingActivity extends Activity {
         timePicker.setCurrentMinute(0);         //значение
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
-
-        btnBack.setEnabled(false);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +62,6 @@ public class SettingActivity extends Activity {
                     textView.setText(getString(R.string.WorkDayEnd));   //меняем текст
                     timePicker.setCurrentHour(17);      //ставим таймпикер на следующее положение
                     timePicker.setCurrentMinute(0);    //дальше всё аналогично
-                    btnBack.setEnabled(true);
                     return;
                 }
 
@@ -124,8 +120,9 @@ public class SettingActivity extends Activity {
     //ОБРАБОТКА КЛАВИШИ НАЗАД
 
     public void onBackPressed() {
+        super.onBackPressed();
+
         final TextView textView = (TextView)findViewById(R.id.textView5);
-        final Button btnBack = (Button)findViewById(R.id.btnBack);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
 
@@ -135,7 +132,6 @@ public class SettingActivity extends Activity {
             textView.setText(getString(R.string.WorkDayBegin));
             timePicker.setCurrentHour(8);
             timePicker.setCurrentMinute(0);
-            btnBack.setEnabled(false);
         }
 
         //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
