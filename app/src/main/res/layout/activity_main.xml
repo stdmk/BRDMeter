@@ -10,19 +10,9 @@
         android:layout_height="wrap_content"
         android:text="Старт"
         android:id="@+id/buttonStart"
-        android:onClick="onBtnStrt"
         android:layout_alignTop="@+id/buttonStop"
-        android:layout_toLeftOf="@+id/chronometer"
-        android:layout_toStartOf="@+id/chronometer" />
-
-    <Chronometer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chronometer"
-        android:textSize="48sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="82dp" />
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_toStartOf="@+id/textView2" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,8 +20,8 @@
         android:text="Стоп"
         android:id="@+id/buttonStop"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/chronometer"
-        android:layout_toEndOf="@+id/chronometer" />
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,7 +48,19 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView3"
-        android:layout_below="@+id/chronometer"
+        android:text="0"
+        android:layout_above="@+id/buttonStop"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="27dp" />
+        android:layout_marginBottom="51dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="00:00:00"
+        android:id="@+id/textView6"
+        android:layout_marginTop="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

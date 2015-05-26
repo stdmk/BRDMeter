@@ -5,29 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends Activity {
 
 
-    int totalTime = 0;         //всего времени
-    int bufTime = 0;           //счётчик секунд
-    float totalMoney = 0;        //всего денег
-    float bufMoney = 0;          //счётчик копеек
-    float salary = 23000;            //зарплата
-    float countDayInMonth = 30;      //рабочих дней в месяце
-    float countHoursIntDay = 8;      //рабочих часов в день
-    float tickInMoney = 0;         //денег в секунду
+    long totalTime = 0;             //всего времени
+    int bufTime = 0;                //счётчик секунд
+    float totalMoney = 0;           //всего денег
+    float bufMoney = 0;             //счётчик копеек
+    float salary = 23000;           //зарплата
+    float countDayInMonth = 30;     //рабочих дней в месяце
+    float countHoursIntDay = 8;     //рабочих часов в день
+    float tickInMoney = 0;          //денег в секунду
     int tickCorrector = 0;          //коррекция счётчика хронометра
-    boolean btnStopPressed = false;   //нажата ли кнопка Стоп
     int workDayBegin;               //время начала рабочего дня (в секундах)
     int workDayEnd;                 //время конца рабочего дня (в секундах)
     int lunchBegin;                 //время начала обеда(в секундах)
@@ -35,6 +35,11 @@ public class MainActivity extends Activity {
     float tempMoney;                //временные деньги (необходимо, если приложение было свёрнуто)
     int tempTime;                   //временное время о_О (необходимо по той же причине)
     long tempChrome1;               //положение хронометра перед сворачиванием
+    Timer mainTimer;                //главный таймер
+    TimerTask mainTimerTask;        //действия по таймеру
+    long secInTimer;                //секунд по таймеру
+    long minInTimer;                //минут по таймеру
+    long hourInTimer;               //часов по таймеру
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
@@ -46,7 +51,9 @@ public class MainActivity extends Activity {
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
     public final String PREFERENCE_TEMP_TIME = "temptime";                //временное время
     public final String PREFERENCE_TEMP_MONEY = "tempmoney";              //временные деньги(когда приложение сворачивается)
-    public final String PREFERENCE_TEMP_CHROME1 = "tempchrome1";          //временное положение хронометра
+    public final String PREFERENCE_TEMP_HOUR = "temphour";                //временно часов
+    public final String PREFERENCE_TEMP_MIN = "tempmin";                  //временно минут
+    public final String PREFERENCE_TEMP_SEC = "tempsec";                  //временно секунд
 
     private SharedPreferences setting;
 
@@ -55,15 +62,15 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button btnStart = (Button) findViewById(R.id.buttonStart);
-        final Button btnStop = (Button) findViewById(R.id.buttonStop);
-        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
-        final TextView textTotalTime = (TextView) findViewById(R.id.textView);
-        final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);
-        final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);
+        final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
+        final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
+        final TextView textTotalTime = (TextView) findViewById(R.id.textView);      //вывод всего времени
+        final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
+        final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
+        final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
-        totalTime = setting.getInt(PREFERENCE_TOTAL_TIME, 0);
+        totalTime = setting.getLong(PREFERENCE_TOTAL_TIME, 0);
         totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
         workDayBegin = setting.getInt(PREFERENCE_WORKDAY_BEGIN, 0);         //берём настройки из файла
         workDayEnd = setting.getInt(PREFERENCE_WORKDAY_END, 0);
@@ -72,7 +79,38 @@ public class MainActivity extends Activity {
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
         tempTime = setting.getInt(PREFERENCE_TEMP_TIME, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
-        tempChrome1 = setting.getLong(PREFERENCE_TEMP_CHROME1, 0);
+
+        mainTimer = new Timer();
+        mainTimerTask = new TimerTask() {
+
+        // ДЕЙСТВИЯ ПО ТАЙМЕРУ
+
+            @Override
+            public void run() {
+
+                secInTimer = secInTimer +1;
+                if (secInTimer == 60) {
+                    secInTimer = 0;
+                    minInTimer = minInTimer + 1;            //увеличение секунд, минут, часов
+                    if (minInTimer == 60) {
+                        minInTimer = 0;
+                        hourInTimer = hourInTimer + 1;
+                    }
+                }
+
+                bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
+
+                runOnUiThread(new Runnable() {      //доступ к изменению компонентов
+                    @Override
+                    public void run() {
+                        textMoneyCounter.setText(String.format("%.2f", bufMoney));      //отображается увеличение копеек
+                        textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
+                                +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
+                                +String.format("%02d", secInTimer));
+                    }
+                });
+            }
+        };
 
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
             textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
@@ -82,16 +120,28 @@ public class MainActivity extends Activity {
             startActivity(intent);
         }
 
-        if (tempMoney != 0) {
-            chrome1.setBase(setting.getLong(PREFERENCE_TEMP_TIME, 0));
-            totalMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+        if (tempMoney != 0) {                                                           //если приложение было свёрнуто
+            hourInTimer = setting.getLong(PREFERENCE_TEMP_HOUR, 0);
+            minInTimer = setting.getLong(PREFERENCE_TEMP_MIN, 0);
+            secInTimer = setting.getLong(PREFERENCE_TEMP_SEC, 0);
+            bufMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
 
+            textTimeCounter.setText(String.format("%02d", hourInTimer) + ":"
+                    + String.format("%02d", minInTimer) + ":"                   //выводим временные данные
+                    + String.format("%02d", secInTimer));
+            textMoneyCounter.setText(String.valueOf(bufMoney));
 
-            textTotalMoney.setText("Всего времени: " + String.format("%.2f", totalMoney));
+            btnStart.setEnabled(false);
+            btnStop.setEnabled(true);
+
+            mainTimer.schedule(mainTimerTask, 1000, 1000);
+        } else {
+            secInTimer = 0;
+            minInTimer = 0;
+            hourInTimer = 0;
         }
 
         btnStop.setEnabled(false);
-        chrome1.stop();
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
 
@@ -100,9 +150,7 @@ public class MainActivity extends Activity {
         btnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
             public void onClick(View v) {
-                chrome1.setBase(SystemClock.elapsedRealtime()+tempTime);
-                chrome1.start();
-                btnStopPressed = false;     //кнопка стоп не нажата, подсчёт идёт, данные сохранять не надо
+                mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
                 btnStart.setEnabled(false);
                 btnStop.setEnabled(true);
             }
@@ -113,12 +161,14 @@ public class MainActivity extends Activity {
         btnStop.setOnClickListener(new OnClickListener() {              //Кнопка стоп
             @Override
             public void onClick(View v) {
-                btnStopPressed = true;      //кнопка стоп нажата, подсчёт не идёт, данные сохранятся
-                totalTime = totalTime + bufTime;    //всего времени подсчёт
+                mainTimer.cancel();         //стоп таймера
+                mainTimer.purge();
+
+                totalTime = totalTime + (hourInTimer * 60 * 60 + minInTimer * 60 + secInTimer);    //всего времени подсчёт
                 totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
 
-                chrome1.setBase(SystemClock.elapsedRealtime());
-                chrome1.stop();
+                textTimeCounter.setText("00:00:00");    //обнуляем вывод таймера
+
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
 
@@ -128,24 +178,11 @@ public class MainActivity extends Activity {
 
                 bufTime = 0;
                 bufMoney = 0;
-                tickCorrector = 0;
+                secInTimer = 0;
+                minInTimer = 0;
+                hourInTimer = 0;
+
                 SaveTotalData();
-            }
-        });
-
-        //ТИКАНЬЕ ХРОНОМЕТРА
-
-        chrome1.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                if (tickCorrector > 1) {
-                    bufTime = bufTime + 1;      //увеличиваются секунды
-                    bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
-
-                    textMoneyCounter.setText(String.format("%.2f", bufMoney));     //отображается увеличение копеек
-                } else {
-                    tickCorrector = tickCorrector + 1;
-                }
             }
         });
     }
@@ -155,9 +192,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
 
-        chrome1.stop();
+        mainTimer.cancel();
         SaveTempData();
 
         finish();
@@ -173,9 +209,8 @@ public class MainActivity extends Activity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
 
-        chrome1.stop();
+        mainTimer.cancel();
         SaveTempData();
 
         finish();
@@ -185,23 +220,26 @@ public class MainActivity extends Activity {
 
     public void SaveTotalData(){
         SharedPreferences.Editor edit = setting.edit();
-        edit.putInt(PREFERENCE_TOTAL_TIME, totalTime);
+        edit.putLong(PREFERENCE_TOTAL_TIME, totalTime);
         edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
         edit.putInt(PREFERENCE_TEMP_TIME, 0);
         edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
-        edit.putLong(PREFERENCE_TEMP_CHROME1, 0);
+        edit.putLong(PREFERENCE_TEMP_HOUR, 0);
+        edit.putLong(PREFERENCE_TEMP_MIN, 0);
+        edit.putLong(PREFERENCE_TEMP_SEC, 0);
         edit.apply();
     }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ФАЙЛОВ
 
     public void SaveTempData () {
-        final Chronometer chrome1 = (Chronometer) findViewById(R.id.chronometer);
 
         SharedPreferences.Editor edit = setting.edit();
         edit.putInt(PREFERENCE_TEMP_TIME, bufTime);
         edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
-        edit.putLong(PREFERENCE_TEMP_CHROME1, chrome1.getBase());
+        edit.putLong(PREFERENCE_TEMP_HOUR, hourInTimer);
+        edit.putLong(PREFERENCE_TEMP_MIN, minInTimer);
+        edit.putLong(PREFERENCE_TEMP_SEC, secInTimer);
         edit.apply();
     }
 
