@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
     int tempTime;                   //временное время о_О (необходимо по той же причине)
     long tempChrome1;               //положение хронометра перед сворачиванием
     Timer mainTimer;                //главный таймер
-    TimerTask mainTimerTask;        //действия по таймеру
+    MainTimerTask mainTimerTask;   //действия по таймеру
     long secInTimer;                //секунд по таймеру
     long minInTimer;                //минут по таймеру
     long hourInTimer;               //часов по таймеру
@@ -80,38 +80,6 @@ public class MainActivity extends Activity {
         tempTime = setting.getInt(PREFERENCE_TEMP_TIME, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
 
-        mainTimer = new Timer();
-        mainTimerTask = new TimerTask() {
-
-        // ДЕЙСТВИЯ ПО ТАЙМЕРУ
-
-            @Override
-            public void run() {
-
-                secInTimer = secInTimer +1;
-                if (secInTimer == 60) {
-                    secInTimer = 0;
-                    minInTimer = minInTimer + 1;            //увеличение секунд, минут, часов
-                    if (minInTimer == 60) {
-                        minInTimer = 0;
-                        hourInTimer = hourInTimer + 1;
-                    }
-                }
-
-                bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
-
-                runOnUiThread(new Runnable() {      //доступ к изменению компонентов
-                    @Override
-                    public void run() {
-                        textMoneyCounter.setText(String.format("%.2f", bufMoney));      //отображается увеличение копеек
-                        textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
-                                +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
-                                +String.format("%02d", secInTimer));
-                    }
-                });
-            }
-        };
-
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
             textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
             textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
@@ -134,14 +102,15 @@ public class MainActivity extends Activity {
             btnStart.setEnabled(false);
             btnStop.setEnabled(true);
 
-            mainTimer.schedule(mainTimerTask, 1000, 1000);
+            mainTimer = new Timer();
+            mainTimerTask = new MainTimerTask();
+            mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
         } else {
             secInTimer = 0;
             minInTimer = 0;
             hourInTimer = 0;
+            btnStop.setEnabled(false);
         }
-
-        btnStop.setEnabled(false);
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
 
@@ -150,6 +119,8 @@ public class MainActivity extends Activity {
         btnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
             public void onClick(View v) {
+                mainTimer = new Timer();
+                mainTimerTask = new MainTimerTask();
                 mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
                 btnStart.setEnabled(false);
                 btnStop.setEnabled(true);
@@ -162,7 +133,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 mainTimer.cancel();         //стоп таймера
-                mainTimer.purge();
+                mainTimer = null;
 
                 totalTime = totalTime + (hourInTimer * 60 * 60 + minInTimer * 60 + secInTimer);    //всего времени подсчёт
                 totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
@@ -185,6 +156,36 @@ public class MainActivity extends Activity {
                 SaveTotalData();
             }
         });
+    }
+
+    class MainTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
+            final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
+
+            secInTimer = secInTimer +1;
+            if (secInTimer == 60) {
+                secInTimer = 0;
+                minInTimer = minInTimer + 1;            //увеличение секунд, минут, часов
+                if (minInTimer == 60) {
+                    minInTimer = 0;
+                    hourInTimer = hourInTimer + 1;
+                }
+            }
+
+            bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
+
+            runOnUiThread(new Runnable() {      //доступ к изменению компонентов
+                @Override
+                public void run() {
+                    textMoneyCounter.setText(String.format("%.2f", bufMoney));      //отображается увеличение копеек
+                    textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
+                            +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
+                            +String.format("%02d", secInTimer));
+                }
+            });
+        }
     }
 
     //СВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
