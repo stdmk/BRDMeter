@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,21 +21,19 @@ public class MainActivity extends Activity {
 
 
     long totalTime = 0;             //всего времени
-    int bufTime = 0;                //счётчик секунд
+    long bufTime = 0;                //счётчик секунд
     float totalMoney = 0;           //всего денег
     float bufMoney = 0;             //счётчик копеек
     float salary = 23000;           //зарплата
     float countDayInMonth = 30;     //рабочих дней в месяце
     float countHoursIntDay = 8;     //рабочих часов в день
     float tickInMoney = 0;          //денег в секунду
-    int tickCorrector = 0;          //коррекция счётчика хронометра
     int workDayBegin;               //время начала рабочего дня (в секундах)
     int workDayEnd;                 //время конца рабочего дня (в секундах)
     int lunchBegin;                 //время начала обеда(в секундах)
     int lunchEnd;                   //время конца обеда(в секундах)
     float tempMoney;                //временные деньги (необходимо, если приложение было свёрнуто)
-    int tempTime;                   //временное время о_О (необходимо по той же причине)
-    long tempChrome1;               //положение хронометра перед сворачиванием
+    long hideTime;                  //время когда приложение было свёрнуто
     Timer mainTimer;                //главный таймер
     MainTimerTask mainTimerTask;   //действия по таймеру
     long secInTimer;                //секунд по таймеру
@@ -54,6 +53,7 @@ public class MainActivity extends Activity {
     public final String PREFERENCE_TEMP_HOUR = "temphour";                //временно часов
     public final String PREFERENCE_TEMP_MIN = "tempmin";                  //временно минут
     public final String PREFERENCE_TEMP_SEC = "tempsec";                  //временно секунд
+    public final String PREFERENCE_HIDE_TIME = "hidetime";                //время перед сворачиванием
 
     private SharedPreferences setting;
 
@@ -68,6 +68,7 @@ public class MainActivity extends Activity {
         final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
         final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
         final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
+        final TextView textTest = (TextView) findViewById(R.id.textView7);          //тестовая вьюшка, временная
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
         totalTime = setting.getLong(PREFERENCE_TOTAL_TIME, 0);
@@ -77,22 +78,40 @@ public class MainActivity extends Activity {
         lunchBegin = setting.getInt(PREFERENCE_LUNCH_BEGIN, 0);
         lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
-        tempTime = setting.getInt(PREFERENCE_TEMP_TIME, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
 
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
-            textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
-            textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
+            CalcTotalTime();
         } else {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
         }
 
+        tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
+        mainTimer = new Timer();
+
         if (tempMoney != 0) {                                                           //если приложение было свёрнуто
-            hourInTimer = setting.getLong(PREFERENCE_TEMP_HOUR, 0);
-            minInTimer = setting.getLong(PREFERENCE_TEMP_MIN, 0);
-            secInTimer = setting.getLong(PREFERENCE_TEMP_SEC, 0);
-            bufMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+            hourInTimer = setting.getLong(PREFERENCE_TEMP_HOUR, 0);         //значение часов на таймере перед сворачиванием
+            minInTimer = setting.getLong(PREFERENCE_TEMP_MIN, 0);           //значение минут на таймере перед сворачиванием
+            secInTimer = setting.getLong(PREFERENCE_TEMP_SEC, 0);           //значение секунд на таймере перед сворачиванием
+            bufMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);          //значение копеек перед сворачиванием
+            bufTime = setting.getLong(PREFERENCE_TEMP_TIME, 0);             //значение насчитанных секунд перед сворачиванем
+            hideTime = setting.getLong(PREFERENCE_HIDE_TIME, 0);            //время в секундах, когда приложение было свёрнуто
+
+            long timeNow = System.currentTimeMillis() / 1000;   //текущее время
+            long buf = bufTime+(timeNow-hideTime);              //значение сколько секунд приложение было свёрнуто+сколько насчитало перед сворачиванием
+            secInTimer = secInTimer + buf;
+
+            bufMoney = bufMoney + (tickInMoney * secInTimer);   //подсчёт копеек, которые прибавились, пока приложение было свёрнуто
+
+            if (secInTimer>=60) {
+                minInTimer = minInTimer +  secInTimer/60;
+                secInTimer = secInTimer % 60;
+            }                                                       //подсчёт сколько прошло минут или даже часов
+            if (minInTimer>=60) {
+                hourInTimer = hourInTimer + minInTimer/60;
+                minInTimer = minInTimer % 60;
+            }
 
             textTimeCounter.setText(String.format("%02d", hourInTimer) + ":"
                     + String.format("%02d", minInTimer) + ":"                   //выводим временные данные
@@ -102,7 +121,6 @@ public class MainActivity extends Activity {
             btnStart.setEnabled(false);
             btnStop.setEnabled(true);
 
-            mainTimer = new Timer();
             mainTimerTask = new MainTimerTask();
             mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
         } else {
@@ -112,14 +130,11 @@ public class MainActivity extends Activity {
             btnStop.setEnabled(false);
         }
 
-        tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
-
         //КНОПКА СТАРТ
 
         btnStart.setOnClickListener(new OnClickListener() {             //кнопка Старт
             @Override
             public void onClick(View v) {
-                mainTimer = new Timer();
                 mainTimerTask = new MainTimerTask();
                 mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
                 btnStart.setEnabled(false);
@@ -134,6 +149,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 mainTimer.cancel();         //стоп таймера
                 mainTimer = null;
+                mainTimer = new Timer();
 
                 totalTime = totalTime + (hourInTimer * 60 * 60 + minInTimer * 60 + secInTimer);    //всего времени подсчёт
                 totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
@@ -143,8 +159,7 @@ public class MainActivity extends Activity {
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
 
-                textTotalTime.setText("Всего времени: " + String.valueOf(totalTime));
-                textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney));
+                CalcTotalTime();
                 textMoneyCounter.setText("0.0");
 
                 bufTime = 0;
@@ -157,6 +172,8 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+    //ДЕЙСТВИЯ ПО ТАЙМЕРУ
 
     class MainTimerTask extends TimerTask {
         @Override
@@ -195,6 +212,10 @@ public class MainActivity extends Activity {
         super.onPause();
 
         mainTimer.cancel();
+
+        Date dateNow = new Date();
+        hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
+
         SaveTempData();
 
         finish();
@@ -217,13 +238,38 @@ public class MainActivity extends Activity {
         finish();
     }
 
+    //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ"
+
+    public void CalcTotalTime() {
+        final TextView textTotalTime = (TextView) findViewById(R.id.textView);      //вывод всего времени
+        final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
+
+        long bufSec = 0;
+        long bufMin = 0;
+        long bufHour = 0;
+        bufSec = totalTime;
+
+        if (bufSec>=60) {
+            bufMin = bufSec/60;
+            bufSec = bufSec % 60;
+        }                                                       //подсчёт сколько прошло минут или даже часов
+        if (bufMin>=60) {
+            bufHour = bufMin/60;
+            bufMin = bufMin % 60;
+        }
+        textTotalTime.setText("Всего времени: " + String.valueOf(bufHour)+" ч. "
+                +String.valueOf(bufMin)+ " м. "
+                +String.valueOf(bufSec)+ " с.");
+        textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney+ " руб."));
+    }
+
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
 
     public void SaveTotalData(){
         SharedPreferences.Editor edit = setting.edit();
         edit.putLong(PREFERENCE_TOTAL_TIME, totalTime);
         edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
-        edit.putInt(PREFERENCE_TEMP_TIME, 0);
+        edit.putLong(PREFERENCE_TEMP_TIME, 0);
         edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
         edit.putLong(PREFERENCE_TEMP_HOUR, 0);
         edit.putLong(PREFERENCE_TEMP_MIN, 0);
@@ -231,16 +277,17 @@ public class MainActivity extends Activity {
         edit.apply();
     }
 
-    //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ФАЙЛОВ
+    //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ДАННЫХ
 
     public void SaveTempData () {
 
         SharedPreferences.Editor edit = setting.edit();
-        edit.putInt(PREFERENCE_TEMP_TIME, bufTime);
+        edit.putLong(PREFERENCE_TEMP_TIME, bufTime);
         edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
         edit.putLong(PREFERENCE_TEMP_HOUR, hourInTimer);
         edit.putLong(PREFERENCE_TEMP_MIN, minInTimer);
         edit.putLong(PREFERENCE_TEMP_SEC, secInTimer);
+        edit.putLong(PREFERENCE_HIDE_TIME, hideTime);
         edit.apply();
     }
 

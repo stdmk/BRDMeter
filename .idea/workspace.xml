@@ -30,10 +30,10 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.brdmeter" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4050a592-fe00-4d1f-8390-ee2ab92c0de6" name="Default" comment="">
+    <list default="true" id="4050a592-fe00-4d1f-8390-ee2ab92c0de6" name="Default" comment="Энергосберегающий режим">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BRDMeter.iws" />
@@ -81,14 +81,16 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5352941">
-              <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.8812095">
+              <caret line="259" column="8" selection-start-line="259" selection-start-column="8" selection-end-line="259" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#8652#9182#0" expanded="true" />
-                <element signature="e#9181#9182#0" expanded="true" />
-                <element signature="e#9459#9460#0" expanded="true" />
-                <element signature="e#9491#9492#0" expanded="true" />
+                <element signature="e#7541#7903#0" expanded="true" />
+                <element signature="e#7902#7903#0" expanded="true" />
+                <element signature="e#9694#10224#0" expanded="true" />
+                <element signature="e#10223#10224#0" expanded="true" />
+                <element signature="e#10625#10626#0" expanded="true" />
+                <element signature="e#10657#10658#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -106,13 +108,13 @@
       </file>
       <file leaf-file-name="activity_main.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-          <provider selected="true" editor-type-id="text-editor">
+          <provider editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
               <folding />
             </state>
           </provider>
-          <provider editor-type-id="android-designer">
+          <provider selected="true" editor-type-id="android-designer">
             <state />
           </provider>
         </entry>
@@ -133,7 +135,7 @@
       <file leaf-file-name="strings.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-8.84">
               <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
               <folding />
             </state>
@@ -1415,10 +1417,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1429,6 +1427,10 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1439,7 +1441,7 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="emulator-5554" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_21_x86" />
     <property name="FullScreen" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -1715,7 +1717,13 @@
       <option name="project" value="LOCAL" />
       <updated>1432647333567</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Исправлена падучесть приложения">
+      <created>1432805173933</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1432805173933</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1736,20 +1744,20 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2630137" sideWeight="0.517192" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32739726" sideWeight="0.508596" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.49426934" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2630137" sideWeight="0.48280802" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32739726" sideWeight="0.491404" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2630137" sideWeight="0.47994268" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.49713466" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17836677" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.491404" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739726" sideWeight="0.48567334" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1781,7 +1789,9 @@
     <MESSAGE value="Починено приложение, убрана кнопка Назад, теперь её задачи выполняет системная клавиша назад" />
     <MESSAGE value="Энергосберегающий режим(пока неудачно)" />
     <MESSAGE value="Переход на собственный &quot;хронометр&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Переход на собственный &quot;хронометр&quot;" />
+    <MESSAGE value="Исправлена падучесть приложения" />
+    <MESSAGE value="Энергосберегающий режим" />
+    <option name="LAST_COMMIT_MESSAGE" value="Энергосберегающий режим" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1796,10 +1806,12 @@
           <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1813,25 +1825,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
@@ -1848,10 +1860,12 @@
           <caret line="166" column="0" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1865,25 +1879,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
@@ -1900,10 +1914,12 @@
           <caret line="158" column="0" selection-start-line="158" selection-start-column="0" selection-end-line="158" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1917,25 +1933,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -1944,10 +1960,12 @@
           <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1961,25 +1979,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -1988,10 +2006,12 @@
           <caret line="57" column="54" selection-start-line="57" selection-start-column="54" selection-end-line="57" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2012,25 +2032,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="6" column="48" selection-start-line="6" selection-start-column="48" selection-end-line="6" selection-end-column="48" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2039,23 +2059,25 @@
           <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2064,23 +2086,25 @@
           <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2089,23 +2113,25 @@
           <caret line="72" column="53" selection-start-line="72" selection-start-column="53" selection-end-line="72" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2114,23 +2140,25 @@
           <caret line="72" column="25" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2139,23 +2167,25 @@
           <caret line="72" column="25" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2164,23 +2194,25 @@
           <caret line="97" column="23" selection-start-line="97" selection-start-column="23" selection-end-line="97" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2189,23 +2221,25 @@
           <caret line="47" column="38" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2214,23 +2248,25 @@
           <caret line="47" column="38" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
@@ -2239,23 +2275,25 @@
           <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-21/android/app/ActivityThread.java">
@@ -2286,18 +2324,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-21/com/android/internal/os/ZygoteInit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="693" column="0" selection-start-line="693" selection-start-column="0" selection-end-line="693" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="-8.84">
           <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-21/com/android/internal/os/ZygoteInit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="693" column="0" selection-start-line="693" selection-start-column="0" selection-end-line="693" selection-end-column="0" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2309,38 +2358,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
+      <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5352941">
-          <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.8812095">
+          <caret line="259" column="8" selection-start-line="259" selection-start-column="8" selection-end-line="259" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8652#9182#0" expanded="true" />
-            <element signature="e#9181#9182#0" expanded="true" />
-            <element signature="e#9459#9460#0" expanded="true" />
-            <element signature="e#9491#9492#0" expanded="true" />
+            <element signature="e#7541#7903#0" expanded="true" />
+            <element signature="e#7902#7903#0" expanded="true" />
+            <element signature="e#9694#10224#0" expanded="true" />
+            <element signature="e#10223#10224#0" expanded="true" />
+            <element signature="e#10625#10626#0" expanded="true" />
+            <element signature="e#10657#10658#0" expanded="true" />
           </folding>
         </state>
       </provider>
