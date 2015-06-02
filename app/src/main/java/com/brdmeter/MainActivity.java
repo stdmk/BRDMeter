@@ -81,7 +81,8 @@ public class MainActivity extends Activity {
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
 
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
-            CalcTotalTime();
+            textTotalTime.setText(CalcTotalTime());
+            textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
         } else {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
@@ -159,7 +160,10 @@ public class MainActivity extends Activity {
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
 
-                CalcTotalTime();
+                textTotalTime.setText(CalcTotalTime());
+                textTotalTime.setText(CalcTotalTime());
+
+                textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
                 textMoneyCounter.setText("0.0");
 
                 bufTime = 0;
@@ -240,14 +244,11 @@ public class MainActivity extends Activity {
 
     //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ"
 
-    public void CalcTotalTime() {
-        final TextView textTotalTime = (TextView) findViewById(R.id.textView);      //вывод всего времени
-        final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
+    public String CalcTotalTime() {
 
-        long bufSec = 0;
+        long bufSec = totalTime;
         long bufMin = 0;
         long bufHour = 0;
-        bufSec = totalTime;
 
         if (bufSec>=60) {
             bufMin = bufSec/60;
@@ -257,10 +258,7 @@ public class MainActivity extends Activity {
             bufHour = bufMin/60;
             bufMin = bufMin % 60;
         }
-        textTotalTime.setText("Всего времени: " + String.valueOf(bufHour)+" ч. "
-                +String.valueOf(bufMin)+ " м. "
-                +String.valueOf(bufSec)+ " с.");
-        textTotalMoney.setText("Всего денег: " + String.format("%.2f", totalMoney+ " руб."));
+        return "Всего времени: "+String.valueOf(bufHour)+" ч. "+String.valueOf(bufMin)+ " м. "+String.valueOf(bufSec)+" с.";
     }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
