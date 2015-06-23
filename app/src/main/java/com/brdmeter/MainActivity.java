@@ -1,12 +1,9 @@
 package com.brdmeter;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,9 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
     float tempMoney;                //временные деньги (необходимо, если приложение было свёрнуто)
     long hideTime;                  //время когда приложение было свёрнуто
     Timer mainTimer;                //главный таймер
-    MainTimerTask mainTimerTask;   //действия по таймеру
+    MainTimerTask mainTimerTask;    //действия по таймеру
     long secInTimer;                //секунд по таймеру
     long minInTimer;                //минут по таймеру
     long hourInTimer;               //часов по таймеру
+    long timeNow;                   //время сейчас
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
         final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
@@ -76,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
         final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
         final TextView textTest = (TextView) findViewById(R.id.textView7);          //тестовая вьюшка, временная
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);  //прогресс-бар
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
         totalTime = setting.getLong(PREFERENCE_TOTAL_TIME, 0);
@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+
+        timeNow = System.currentTimeMillis() / 1000;   //текущее время
 
         if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
             textTotalTime.setText(CalcTotalTime());
@@ -106,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             bufTime = setting.getLong(PREFERENCE_TEMP_TIME, 0);             //значение насчитанных секунд перед сворачиванем
             hideTime = setting.getLong(PREFERENCE_HIDE_TIME, 0);            //время в секундах, когда приложение было свёрнуто
 
-            long timeNow = System.currentTimeMillis() / 1000;   //текущее время
             long buf = bufTime+(timeNow-hideTime);              //значение сколько секунд приложение было свёрнуто+сколько насчитало перед сворачиванием
             secInTimer = secInTimer + buf;
 
@@ -137,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
             hourInTimer = 0;
             btnStop.setEnabled(false);
         }
+
+        Calendar calendar = Calendar.getInstance();
+        int buf = (calendar.get(Calendar.HOUR) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
+        progressBar.setMax(workDayEnd);
+        progressBar.setProgress(buf);           //установки прогресс-бара
 
         //КНОПКА СТАРТ
 
@@ -197,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
             final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
+            final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);  //прогресс-бар
 
             secInTimer = secInTimer +1;
             if (secInTimer == 60) {
@@ -217,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                     textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
                             +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
                             +String.format("%02d", secInTimer));
+                    progressBar.setProgress(progressBar.getProgress()+1);
                 }
             });
         }
