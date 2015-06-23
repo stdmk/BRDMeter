@@ -1,10 +1,14 @@
 package com.brdmeter;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
 
     long totalTime = 0;             //всего времени
@@ -61,6 +65,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
         final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
@@ -177,6 +184,12 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     //ДЕЙСТВИЯ ПО ТАЙМЕРУ
 
     class MainTimerTask extends TimerTask {
@@ -217,7 +230,6 @@ public class MainActivity extends Activity {
 
         mainTimer.cancel();
 
-        Date dateNow = new Date();
         hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
 
         SaveTempData();
@@ -287,14 +299,6 @@ public class MainActivity extends Activity {
         edit.putLong(PREFERENCE_TEMP_SEC, secInTimer);
         edit.putLong(PREFERENCE_HIDE_TIME, hideTime);
         edit.apply();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
