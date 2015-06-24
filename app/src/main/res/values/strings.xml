@@ -3,7 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Настройки</string>
-    <string name="title_activity_setting">Настройки</string>
+    <string name="title_activity_setting">Мастер настроек</string>
     <string name="WorkDayBegin">Начало рабочего дня</string>
     <string name="WorkDayEnd">Конец рабочего дня</string>
     <string name="LunchBegin">Начало обеда</string>

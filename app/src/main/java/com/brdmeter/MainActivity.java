@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     long minInTimer;                //минут по таймеру
     long hourInTimer;               //часов по таймеру
     long timeNow;                   //время сейчас
+    boolean keyStart;               //ключ, что была нажата кнопка старт
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
@@ -140,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Calendar calendar = Calendar.getInstance();
-        int buf = (calendar.get(Calendar.HOUR) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
+        int buf = (calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
         buf = buf - workDayBegin;
-        progressBar.setMax(workDayEnd);
+        progressBar.setMax(workDayEnd-workDayBegin);
         progressBar.setProgress(buf);           //установки прогресс-бара
 
         //КНОПКА СТАРТ
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
                 btnStart.setEnabled(false);
                 btnStop.setEnabled(true);
+                keyStart = true;
             }
         });
 
@@ -185,16 +187,11 @@ public class MainActivity extends AppCompatActivity {
                 secInTimer = 0;
                 minInTimer = 0;
                 hourInTimer = 0;
+                keyStart = false;
 
                 SaveTotalData();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     //ДЕЙСТВИЯ ПО ТАЙМЕРУ
@@ -237,11 +234,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        mainTimer.cancel();
-
-        hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
-
-        SaveTempData();
+        if (keyStart) {
+            mainTimer.cancel();
+            hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
+            SaveTempData();
+        }
 
         finish();
     }
@@ -257,8 +254,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        mainTimer.cancel();
-        SaveTempData();
+        if (keyStart) {
+            mainTimer.cancel();
+            hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
+            SaveTempData();
+        }
 
         finish();
     }
@@ -310,6 +310,16 @@ public class MainActivity extends AppCompatActivity {
         edit.apply();
     }
 
+    //TOOLBAR
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    //ДЕЙСТВИЯ ТУЛБАРА
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -318,7 +328,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {           //кнопка настроек
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(intent);
             return true;
         }
 

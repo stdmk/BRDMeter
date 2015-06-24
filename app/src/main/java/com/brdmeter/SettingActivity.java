@@ -126,6 +126,13 @@ public class SettingActivity extends Activity {
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
 
+        //ПЕРВОЕ ОКОШКО(ВОЗВРАЩАЕТ НА ГЛАВНЫЙ ЭКРАН)
+
+        if (textView.getText() == getString(R.string.WorkDayBegin)) {
+            Intent intent = new Intent(SettingActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
         //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
 
         if (textView.getText() == getString(R.string.WorkDayEnd)) {
