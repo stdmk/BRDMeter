@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int buf = (calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
         buf = buf - workDayBegin;
-        progressBar.setMax(workDayEnd-workDayBegin);
+        progressBar.setMax(workDayEnd - workDayBegin);
         progressBar.setProgress(buf);           //установки прогресс-бара
 
         //КНОПКА СТАРТ
@@ -260,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
             SaveTempData();
         }
 
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
     }
 

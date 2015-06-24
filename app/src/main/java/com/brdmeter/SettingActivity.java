@@ -111,6 +111,7 @@ public class SettingActivity extends Activity {
                     SaveTotalData();    //введены последние необходимые данные, сохраняем
                     Intent intent = new Intent(SettingActivity.this, MainActivity.class);
                     startActivity(intent);      //переходим на главное окно
+                    finish();
                 }
             }
         });
@@ -131,6 +132,7 @@ public class SettingActivity extends Activity {
         if (textView.getText() == getString(R.string.WorkDayBegin)) {
             Intent intent = new Intent(SettingActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
         //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
