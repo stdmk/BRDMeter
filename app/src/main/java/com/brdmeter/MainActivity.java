@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
         final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         int buf = (calendar.get(Calendar.HOUR) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
+        buf = buf - workDayBegin;
         progressBar.setMax(workDayEnd);
         progressBar.setProgress(buf);           //установки прогресс-бара
 
