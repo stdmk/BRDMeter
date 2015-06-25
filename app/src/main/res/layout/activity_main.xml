@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView3"
-        android:text="0"
+        android:text="0.0 (руб.)"
         android:layout_marginTop="46dp"
         android:layout_alignTop="@+id/textView6"
         android:layout_centerHorizontal="true" />

@@ -9,7 +9,9 @@
     <string name="LunchBegin">Начало обеда</string>
     <string name="LunchEnd">Конец обеда</string>
     <string name="Salary">Введите размер зарплаты в рублях</string>
-    <string name="ExampleSalary">10000</string>
+    <string name="DayPrepay">Введите день месяца выдачи аванса</string>
+    <string name="DaySalary">Введите день месяца вылачи зарплаты</string>
+    <string name="ExampleDayPrepay">14</string>
 
     <string name="settInActionBar">Настройки</string>
     

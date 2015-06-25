@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.content.SharedPreferences;
 
+import java.lang.ref.SoftReference;
+
 
 public class SettingActivity extends Activity {
 
@@ -23,13 +25,17 @@ public class SettingActivity extends Activity {
     public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
     public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
-    public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
+    public final String PREFERENCE_LUNCH_END = "lunchend";               //время конца обеда
+    public final String PREFERENCE_DAY_PREPAY = "dayprepay";              //день аванса
+    public final String PREFERENCE_DAY_SALARY = "daysalary";              //день зарплаты
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
 
     int workDayBegin;
     int workDayEnd;
     int lunchBegin;
     int lunchEnd;
+    int dayPrepay;
+    int daySalary;
     float salary;
 
     @Override
@@ -41,12 +47,17 @@ public class SettingActivity extends Activity {
         final Button btnSave = (Button)findViewById(R.id.btnSave);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
+        final TextView testText = (TextView)findViewById(R.id.textView8);
 
-        timePicker.setIs24HourView(true);       //24-часовой формат
-        timePicker.setCurrentHour(8);           //начальное
-        timePicker.setCurrentMinute(0);         //значение
+        ReadSetting();
+        if (workDayBegin == 0) {
+            DefaultSetting();
+            ReadSetting();
+        }
 
-        setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+        timePicker.setIs24HourView(true);                 //24-часовой формат
+
+        Sec2HM(workDayBegin);   //переводит секунды в часы и минуты + выводит данные в таймпикер
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +71,8 @@ public class SettingActivity extends Activity {
                     j = timePicker.getCurrentMinute();
                     workDayBegin = i * 60 * 60 + j * 60;    //переводим в секунды (у нас ведь всё в секундах)
                     textView.setText(getString(R.string.WorkDayEnd));   //меняем текст
-                    timePicker.setCurrentHour(17);      //ставим таймпикер на следующее положение
-                    timePicker.setCurrentMinute(0);    //дальше всё аналогично
+
+                    Sec2HM(workDayEnd);
                     return;
                 }
 
@@ -72,8 +83,9 @@ public class SettingActivity extends Activity {
                     j = timePicker.getCurrentMinute();
                     workDayEnd = i * 60 * 60 + j * 60;
                     textView.setText(getString(R.string.LunchBegin));
-                    timePicker.setCurrentHour(13);
-                    timePicker.setCurrentMinute(0);
+
+                    Sec2HM(lunchBegin);
+
                     return;
                 }
 
@@ -84,8 +96,8 @@ public class SettingActivity extends Activity {
                     j = timePicker.getCurrentMinute();
                     lunchBegin = i * 60 * 60 + j * 60;
                     textView.setText(getString(R.string.LunchEnd));
-                    timePicker.setCurrentHour(14);
-                    timePicker.setCurrentMinute(0);
+
+                    Sec2HM(lunchEnd);
                     return;
                 }
 
@@ -95,12 +107,35 @@ public class SettingActivity extends Activity {
                     i = timePicker.getCurrentHour();
                     j = timePicker.getCurrentMinute();
                     lunchEnd = i * 60 * 60 + j * 60;
-                    textView.setText(getString(R.string.Salary));
+                    textView.setText(getString(R.string.DayPrepay));
                     timePicker.setVisibility(View.INVISIBLE);       //убираем выбор времени и ставим эдит текст
-                    editText.setVisibility(View.VISIBLE);           //дальше вводится зарплата
+                    editText.setVisibility(View.VISIBLE);           //дальше вводится день аванса
                     editText.requestFocus();
+                    editText.setText(String.valueOf(dayPrepay));
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);   //программный вызов
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);                                         //клавиатуры
+                    return;
+                }
+
+                //ВВОД ДНЯ АВАНСА
+
+                if (textView.getText() == getString(R.string.DayPrepay)) {
+                    dayPrepay = Integer.parseInt(editText.getText().toString());
+                    textView.setText(R.string.DaySalary);
+                    editText.setText(String.valueOf(daySalary));
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    return;
+                }
+
+                //ВВОД ДНЯ ЗАРПЛАТЫ
+
+                if (textView.getText() == getString(R.string.DaySalary)) {
+                    daySalary = Integer.parseInt(editText.getText().toString());
+                    textView.setText(R.string.Salary);
+                    editText.setText(String.valueOf((int) salary));
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                     return;
                 }
 
@@ -132,41 +167,50 @@ public class SettingActivity extends Activity {
         if (textView.getText() == getString(R.string.WorkDayBegin)) {
             Intent intent = new Intent(SettingActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();
         }
 
         //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
 
         if (textView.getText() == getString(R.string.WorkDayEnd)) {
             textView.setText(getString(R.string.WorkDayBegin));
-            timePicker.setCurrentHour(8);
-            timePicker.setCurrentMinute(0);
+            Sec2HM(workDayBegin);
         }
 
         //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
 
         if (textView.getText() == getString(R.string.LunchBegin)) {
             textView.setText(getString(R.string.WorkDayEnd));
-            timePicker.setCurrentHour(17);
-            timePicker.setCurrentMinute(0);
+            Sec2HM(workDayEnd);
         }
 
         //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
 
         if (textView.getText() == getString(R.string.LunchEnd)){
             textView.setText(getString(R.string.LunchBegin));
-            timePicker.setCurrentHour(13);
-            timePicker.setCurrentMinute(0);
+            Sec2HM(lunchBegin);
         }
 
-        //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К КОНЦУ ОБЕДА)
+        //ВВОД ДНЯ АВАНСА(ПЕРЕХОД К КОНЦУ ОБЕДА)
 
-        if (textView.getText() == getString(R.string.Salary)) {
+        if (textView.getText() == getString(R.string.DayPrepay)) {
             textView.setText(getString(R.string.LunchEnd));
-            timePicker.setCurrentHour(14);
-            timePicker.setCurrentMinute(0);
             editText.setVisibility(View.INVISIBLE);
             timePicker.setVisibility(View.VISIBLE);
+            Sec2HM(lunchEnd);
+        }
+
+        //ВВОД ДНЯ ЗАРПЛАТЫ(ПЕРЕХОД КО ДНЮ АВАНСА)
+
+        if (textView.getText() == getString(R.string.DaySalary)) {
+            textView.setText(getString(R.string.DayPrepay));
+            editText.setText(String.valueOf(dayPrepay));
+        }
+
+        //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К ДНЮ ЗАРПЛАТЫ)
+
+        if (textView.getText() == getString(R.string.Salary)) {
+            textView.setText(getString(R.string.DaySalary));
+            editText.setText(String.valueOf(daySalary));
         }
     }
 
@@ -177,11 +221,50 @@ public class SettingActivity extends Activity {
         edit.putInt(PREFERENCE_WORKDAY_BEGIN, workDayBegin);
         edit.putInt(PREFERENCE_WORKDAY_END, workDayEnd);
         edit.putInt(PREFERENCE_LUNCH_BEGIN, lunchBegin);
-        edit.putInt(PREFERENCE_LUNCH_END, lunchBegin);
+        edit.putInt(PREFERENCE_LUNCH_END, lunchEnd);
+        edit.putInt(PREFERENCE_DAY_PREPAY, dayPrepay);
+        edit.putInt(PREFERENCE_DAY_SALARY, daySalary);
         edit.putFloat(PREFERENCE_SALARY, salary);
         edit.apply();
     }
 
+    //ПРОЦЕДУРА ЧТЕНИЯ НАСТРОЕК
+
+    public void ReadSetting() {
+        setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+        workDayBegin = setting.getInt(PREFERENCE_WORKDAY_BEGIN, 0);
+        workDayEnd = setting.getInt(PREFERENCE_WORKDAY_END, 0);
+        lunchBegin = setting.getInt(PREFERENCE_LUNCH_BEGIN, 0);
+        lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
+        dayPrepay = setting.getInt(PREFERENCE_DAY_PREPAY, 0);
+        daySalary = setting.getInt(PREFERENCE_DAY_SALARY, 0);
+        salary = setting.getFloat(PREFERENCE_SALARY, 0);
+    }
+
+    //ПРОЦЕДУРА СБРОСА НАСТРОЕК
+
+    public void DefaultSetting() {
+        SharedPreferences.Editor edit = setting.edit();
+        edit.putInt(PREFERENCE_WORKDAY_BEGIN, 28800);
+        edit.putInt(PREFERENCE_WORKDAY_END, 61200);
+        edit.putInt(PREFERENCE_LUNCH_BEGIN, 43200);
+        edit.putInt(PREFERENCE_LUNCH_END, 46800);
+        edit.putInt(PREFERENCE_DAY_PREPAY, 15);
+        edit.putInt(PREFERENCE_DAY_SALARY, 1);
+        edit.putFloat(PREFERENCE_SALARY, 10000);
+        edit.apply();
+    }
+
+    //ПРОЦЕДУРА ПЕРЕВОДА СЕКУНД В ЧАСЫ И ВЫВОД ПОЛУЧЕННЫХ ДАННЫХ НА ЭКРАН
+
+    public void Sec2HM (int sec) {
+        final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+
+        int hour = sec / 60 / 60;                       //из всех секунд вычитаем получившиеся целые часы, получая минуты
+        int min = (sec - (hour * 60 * 60)) / 60;        //перевод из секунд в целые часы
+        timePicker.setCurrentHour(hour);
+        timePicker.setCurrentMinute(min);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             textTimeCounter.setText(String.format("%02d", hourInTimer) + ":"
                     + String.format("%02d", minInTimer) + ":"                   //выводим временные данные
                     + String.format("%02d", secInTimer));
-            textMoneyCounter.setText(String.valueOf(bufMoney));
+            textMoneyCounter.setText(String.valueOf(bufMoney)+ " (руб.)");
 
             btnStart.setEnabled(false);
             btnStop.setEnabled(true);
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 textTotalTime.setText(CalcTotalTime());
 
                 textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
-                textMoneyCounter.setText("0.0");
+                textMoneyCounter.setText("0.0 (руб.)");
 
                 bufTime = 0;
                 bufMoney = 0;
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {      //доступ к изменению компонентов
                 @Override
                 public void run() {
-                    textMoneyCounter.setText(String.format("%.2f", bufMoney));      //отображается увеличение копеек
+                    textMoneyCounter.setText(String.format("%.2f", bufMoney)+ " (руб.)");      //отображается увеличение копеек
                     textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
                             +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
                             +String.format("%02d", secInTimer));
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (keyStart) {
             mainTimer.cancel();
-            hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
+            hideTime = System.currentTimeMillis() / 1000;
             SaveTempData();
         }
 
@@ -256,12 +256,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (keyStart) {
             mainTimer.cancel();
-            hideTime = System.currentTimeMillis() / 1000; //(int)(dateNow.getTime()/1000);
+            hideTime = System.currentTimeMillis() / 1000;
             SaveTempData();
         }
 
-        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         finish();
     }
 
