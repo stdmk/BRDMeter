@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Timer;
@@ -331,10 +332,15 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {           //кнопка настроек
-
-            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-            startActivity(intent);
-            return true;
+            if (keyStart) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Сначала остановите отсчёт!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else {
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
