@@ -3,7 +3,18 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Настройки</string>
-    <string name="title_activity_setting">Мастер настроек</string>
+    <string name="btnStart">Старт</string>
+    <string name="btnStop">Стоп</string>
+    <string name="AllTime">Всего времени: 0 ч. 0 м. 0 с.</string>
+    <string name="AllMoney">Всего денег(руб): 0</string>
+    <string name="MoneyCounter">0.0 (руб.)</string>
+    <string name="TimeCounter">00:00:00</string>
+
+    <string name="settInActionBar">Настройки</string>
+
+    <string name="btnSave">Вперёд</string>
+    <string name="btnBack">Назад</string>
+    <string name="SetTitle">МАСТЕР НАСТРОЕК</string>
     <string name="WorkDayBegin">Начало рабочего дня</string>
     <string name="WorkDayEnd">Конец рабочего дня</string>
     <string name="LunchBegin">Начало обеда</string>
@@ -12,8 +23,4 @@
     <string name="DayPrepay">Введите день месяца выдачи аванса</string>
     <string name="DaySalary">Введите день месяца вылачи зарплаты</string>
     <string name="ExampleDayPrepay">14</string>
-
-    <string name="settInActionBar">Настройки</string>
-    
-    <string name="btnBack">Назад</string>
 </resources>
