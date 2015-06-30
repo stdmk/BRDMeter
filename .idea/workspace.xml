@@ -32,7 +32,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4050a592-fe00-4d1f-8390-ee2ab92c0de6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.2.1/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BRDMeter.iws" />
@@ -77,43 +77,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SettingActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SettingActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="56" column="9" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.6055227">
+              <caret line="146" column="35" selection-start-line="146" selection-start-column="35" selection-end-line="146" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2480#6716#0" expanded="true" />
-                <element signature="e#2681#2713#0" expanded="true" />
-                <element signature="e#3004#3034#0" expanded="true" />
-                <element signature="e#3269#3299#0" expanded="true" />
-                <element signature="e#3503#3533#0" expanded="true" />
-                <element signature="e#3699#3729#0" expanded="true" />
-                <element signature="e#3933#3961#0" expanded="true" />
-                <element signature="e#4123#4151#0" expanded="true" />
-                <element signature="e#4353#4382#0" expanded="true" />
-                <element signature="e#5094#5123#0" expanded="true" />
-                <element signature="e#5245#5263#0" expanded="true" />
-                <element signature="e#5647#5676#0" expanded="true" />
-                <element signature="e#5798#5813#0" expanded="true" />
-                <element signature="e#6246#6272#0" expanded="true" />
-                <element signature="e#6715#6716#0" expanded="true" />
-                <element signature="e#6754#9273#0" expanded="true" />
-                <element signature="e#7204#7236#0" expanded="true" />
-                <element signature="e#7508#7538#0" expanded="true" />
-                <element signature="e#7579#7611#0" expanded="true" />
-                <element signature="e#7831#7861#0" expanded="true" />
-                <element signature="e#7902#7932#0" expanded="true" />
-                <element signature="e#8096#8124#0" expanded="true" />
-                <element signature="e#8164#8194#0" expanded="true" />
-                <element signature="e#8356#8385#0" expanded="true" />
-                <element signature="e#8426#8454#0" expanded="true" />
-                <element signature="e#8736#8765#0" expanded="true" />
-                <element signature="e#8806#8835#0" expanded="true" />
-                <element signature="e#9021#9047#0" expanded="true" />
-                <element signature="e#9088#9117#0" expanded="true" />
-                <element signature="e#9272#9273#0" expanded="true" />
+                <element signature="e#2509#7837#0" expanded="true" />
+                <element signature="e#2710#2742#0" expanded="true" />
+                <element signature="e#3033#3063#0" expanded="true" />
+                <element signature="e#3298#3328#0" expanded="true" />
+                <element signature="e#3532#3562#0" expanded="true" />
+                <element signature="e#3728#3758#0" expanded="true" />
+                <element signature="e#3962#3990#0" expanded="true" />
+                <element signature="e#4152#4180#0" expanded="true" />
+                <element signature="e#4382#4411#0" expanded="true" />
+                <element signature="e#5123#5152#0" expanded="true" />
+                <element signature="e#5820#5838#0" expanded="true" />
+                <element signature="e#6222#6251#0" expanded="true" />
+                <element signature="e#6919#6934#0" expanded="true" />
+                <element signature="e#7367#7393#0" expanded="true" />
+                <element signature="e#7836#7837#0" expanded="true" />
+                <element signature="e#7875#10394#0" expanded="true" />
+                <element signature="e#8325#8357#0" expanded="true" />
+                <element signature="e#8629#8659#0" expanded="true" />
+                <element signature="e#8700#8732#0" expanded="true" />
+                <element signature="e#8952#8982#0" expanded="true" />
+                <element signature="e#9023#9053#0" expanded="true" />
+                <element signature="e#9217#9245#0" expanded="true" />
+                <element signature="e#9285#9315#0" expanded="true" />
+                <element signature="e#9477#9506#0" expanded="true" />
+                <element signature="e#9547#9575#0" expanded="true" />
+                <element signature="e#9857#9886#0" expanded="true" />
+                <element signature="e#9927#9956#0" expanded="true" />
+                <element signature="e#10142#10168#0" expanded="true" />
+                <element signature="e#10209#10238#0" expanded="true" />
+                <element signature="e#10393#10394#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -132,10 +132,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.81459564">
+            <state vertical-scroll-proportion="0.0">
               <caret line="340" column="13" selection-start-line="340" selection-start-column="13" selection-end-line="340" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -1379,8 +1379,8 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java" />
       </list>
     </option>
   </component>
@@ -1942,7 +1942,13 @@
       <option name="project" value="LOCAL" />
       <updated>1435651265116</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Запрет настройки, если идёт отсчёт">
+      <created>1435651491683</created>
+      <option name="number" value="00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1435651491683</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2018,7 +2024,8 @@
     <MESSAGE value="Исправление ошибок" />
     <MESSAGE value="Улучшение работы мастера настроек" />
     <MESSAGE value="Исправление ошибок мастера настроек" />
-    <option name="LAST_COMMIT_MESSAGE" value="Исправление ошибок мастера настроек" />
+    <MESSAGE value="Запрет настройки, если идёт отсчёт" />
+    <option name="LAST_COMMIT_MESSAGE" value="Запрет настройки, если идёт отсчёт" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2496,52 +2503,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="9" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
+          <caret line="340" column="13" selection-start-line="340" selection-start-column="13" selection-end-line="340" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2480#6716#0" expanded="true" />
-            <element signature="e#2681#2713#0" expanded="true" />
-            <element signature="e#3004#3034#0" expanded="true" />
-            <element signature="e#3269#3299#0" expanded="true" />
-            <element signature="e#3503#3533#0" expanded="true" />
-            <element signature="e#3699#3729#0" expanded="true" />
-            <element signature="e#3933#3961#0" expanded="true" />
-            <element signature="e#4123#4151#0" expanded="true" />
-            <element signature="e#4353#4382#0" expanded="true" />
-            <element signature="e#5094#5123#0" expanded="true" />
-            <element signature="e#5245#5263#0" expanded="true" />
-            <element signature="e#5647#5676#0" expanded="true" />
-            <element signature="e#5798#5813#0" expanded="true" />
-            <element signature="e#6246#6272#0" expanded="true" />
-            <element signature="e#6715#6716#0" expanded="true" />
-            <element signature="e#6754#9273#0" expanded="true" />
-            <element signature="e#7204#7236#0" expanded="true" />
-            <element signature="e#7508#7538#0" expanded="true" />
-            <element signature="e#7579#7611#0" expanded="true" />
-            <element signature="e#7831#7861#0" expanded="true" />
-            <element signature="e#7902#7932#0" expanded="true" />
-            <element signature="e#8096#8124#0" expanded="true" />
-            <element signature="e#8164#8194#0" expanded="true" />
-            <element signature="e#8356#8385#0" expanded="true" />
-            <element signature="e#8426#8454#0" expanded="true" />
-            <element signature="e#8736#8765#0" expanded="true" />
-            <element signature="e#8806#8835#0" expanded="true" />
-            <element signature="e#9021#9047#0" expanded="true" />
-            <element signature="e#9088#9117#0" expanded="true" />
-            <element signature="e#9272#9273#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/brdmeter/SettingActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.81459564">
-          <caret line="340" column="13" selection-start-line="340" selection-start-column="13" selection-end-line="340" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.6055227">
+          <caret line="146" column="35" selection-start-line="146" selection-start-column="35" selection-end-line="146" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2509#7837#0" expanded="true" />
+            <element signature="e#2710#2742#0" expanded="true" />
+            <element signature="e#3033#3063#0" expanded="true" />
+            <element signature="e#3298#3328#0" expanded="true" />
+            <element signature="e#3532#3562#0" expanded="true" />
+            <element signature="e#3728#3758#0" expanded="true" />
+            <element signature="e#3962#3990#0" expanded="true" />
+            <element signature="e#4152#4180#0" expanded="true" />
+            <element signature="e#4382#4411#0" expanded="true" />
+            <element signature="e#5123#5152#0" expanded="true" />
+            <element signature="e#5820#5838#0" expanded="true" />
+            <element signature="e#6222#6251#0" expanded="true" />
+            <element signature="e#6919#6934#0" expanded="true" />
+            <element signature="e#7367#7393#0" expanded="true" />
+            <element signature="e#7836#7837#0" expanded="true" />
+            <element signature="e#7875#10394#0" expanded="true" />
+            <element signature="e#8325#8357#0" expanded="true" />
+            <element signature="e#8629#8659#0" expanded="true" />
+            <element signature="e#8700#8732#0" expanded="true" />
+            <element signature="e#8952#8982#0" expanded="true" />
+            <element signature="e#9023#9053#0" expanded="true" />
+            <element signature="e#9217#9245#0" expanded="true" />
+            <element signature="e#9285#9315#0" expanded="true" />
+            <element signature="e#9477#9506#0" expanded="true" />
+            <element signature="e#9547#9575#0" expanded="true" />
+            <element signature="e#9857#9886#0" expanded="true" />
+            <element signature="e#9927#9956#0" expanded="true" />
+            <element signature="e#10142#10168#0" expanded="true" />
+            <element signature="e#10209#10238#0" expanded="true" />
+            <element signature="e#10393#10394#0" expanded="true" />
           </folding>
         </state>
       </provider>

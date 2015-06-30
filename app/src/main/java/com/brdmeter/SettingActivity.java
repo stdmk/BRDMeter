@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 
 public class SettingActivity extends Activity {
@@ -124,6 +125,18 @@ public class SettingActivity extends Activity {
 
                 if (textView.getText() == getString(R.string.DayPrepay)) {
                     dayPrepay = Integer.parseInt(editText.getText().toString());
+
+                    if (dayPrepay <= 0) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Проверьте правильность ввода данных", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                    if (dayPrepay > 31) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Проверьте правильность ввода данных", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+
                     textView.setText(R.string.DaySalary);
                     editText.setText(String.valueOf(daySalary));
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -135,6 +148,18 @@ public class SettingActivity extends Activity {
 
                 if (textView.getText() == getString(R.string.DaySalary)) {
                     daySalary = Integer.parseInt(editText.getText().toString());
+
+                    if (daySalary <= 0) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Проверьте правильность ввода данных", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                    if (daySalary > 31) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Проверьте правильность ввода данных", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+
                     textView.setText(R.string.Salary);
                     editText.setText(String.valueOf((int) salary));
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
