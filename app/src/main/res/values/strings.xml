@@ -2,7 +2,7 @@
     <string name="app_name">BRDMeter</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Настройки</string>
+    <string name="title_activity_setting">Настройки</string>
     <string name="btnStart">Старт</string>
     <string name="btnStop">Стоп</string>
     <string name="AllTime">Всего времени: 0 ч. 0 м. 0 с.</string>
