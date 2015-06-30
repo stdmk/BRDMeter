@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.content.SharedPreferences;
 
-import java.lang.ref.SoftReference;
-
 
 public class SettingActivity extends Activity {
 
@@ -29,6 +27,7 @@ public class SettingActivity extends Activity {
     public final String PREFERENCE_DAY_PREPAY = "dayprepay";              //день аванса
     public final String PREFERENCE_DAY_SALARY = "daysalary";              //день зарплаты
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
+    public final String PREFERENCE_KEYDEF = "keydef";                     //были ли заполнены настройки
 
     int workDayBegin;
     int workDayEnd;
@@ -37,6 +36,7 @@ public class SettingActivity extends Activity {
     int dayPrepay;
     int daySalary;
     float salary;
+    boolean bufKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +45,13 @@ public class SettingActivity extends Activity {
 
         final TextView textView = (TextView)findViewById(R.id.textView5);
         final Button btnSave = (Button)findViewById(R.id.btnSave);
+        final Button btnBack = (Button)findViewById(R.id.btnBack);
         final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
         final EditText editText = (EditText)findViewById(R.id.editText);
         final TextView testText = (TextView)findViewById(R.id.textView8);
 
         ReadSetting();
-        if (workDayBegin == 0) {
+        if (!bufKey) {
             DefaultSetting();
             ReadSetting();
         }
@@ -62,7 +63,7 @@ public class SettingActivity extends Activity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i,j;
+                int i, j;
 
                 //НАЧАЛО РАБОЧЕГО ДНЯ
 
@@ -73,6 +74,8 @@ public class SettingActivity extends Activity {
                     textView.setText(getString(R.string.WorkDayEnd));   //меняем текст
 
                     Sec2HM(workDayEnd);
+
+                    btnBack.setEnabled(true);
                     return;
                 }
 
@@ -136,6 +139,7 @@ public class SettingActivity extends Activity {
                     editText.setText(String.valueOf((int) salary));
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    btnSave.setText("Сохранить");
                     return;
                 }
 
@@ -143,10 +147,72 @@ public class SettingActivity extends Activity {
 
                 if (textView.getText() == getString(R.string.Salary)) {
                     salary = Integer.parseInt(editText.getText().toString());
+                    bufKey = true;
                     SaveTotalData();    //введены последние необходимые данные, сохраняем
                     Intent intent = new Intent(SettingActivity.this, MainActivity.class);
                     startActivity(intent);      //переходим на главное окно
                     finish();
+                }
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final TextView textView = (TextView)findViewById(R.id.textView5);
+                final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+                final EditText editText = (EditText)findViewById(R.id.editText);
+
+                //ПЕРВОЕ ОКОШКО(ВОЗВРАЩАЕТ НА ГЛАВНЫЙ ЭКРАН)
+
+                if (textView.getText() == getString(R.string.WorkDayBegin)) {
+                    Intent intent = new Intent(SettingActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+
+                //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
+
+                if (textView.getText() == getString(R.string.WorkDayEnd)) {
+                    textView.setText(getString(R.string.WorkDayBegin));
+                    Sec2HM(workDayBegin);
+                    btnBack.setEnabled(false);
+                }
+
+                //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
+
+                if (textView.getText() == getString(R.string.LunchBegin)) {
+                    textView.setText(getString(R.string.WorkDayEnd));
+                    Sec2HM(workDayEnd);
+                }
+
+                //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
+
+                if (textView.getText() == getString(R.string.LunchEnd)){
+                    textView.setText(getString(R.string.LunchBegin));
+                    Sec2HM(lunchBegin);
+                }
+
+                //ВВОД ДНЯ АВАНСА(ПЕРЕХОД К КОНЦУ ОБЕДА)
+
+                if (textView.getText() == getString(R.string.DayPrepay)) {
+                    textView.setText(getString(R.string.LunchEnd));
+                    editText.setVisibility(View.INVISIBLE);
+                    timePicker.setVisibility(View.VISIBLE);
+                    Sec2HM(lunchEnd);
+                }
+
+                //ВВОД ДНЯ ЗАРПЛАТЫ(ПЕРЕХОД КО ДНЮ АВАНСА)
+
+                if (textView.getText() == getString(R.string.DaySalary)) {
+                    textView.setText(getString(R.string.DayPrepay));
+                    editText.setText(String.valueOf(dayPrepay));
+                }
+
+                //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К ДНЮ ЗАРПЛАТЫ)
+
+                if (textView.getText() == getString(R.string.Salary)) {
+                    textView.setText(getString(R.string.DaySalary));
+                    editText.setText(String.valueOf(daySalary));
+                    btnSave.setText("Вперёд");
                 }
             }
         });
@@ -158,60 +224,6 @@ public class SettingActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        final TextView textView = (TextView)findViewById(R.id.textView5);
-        final TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
-        final EditText editText = (EditText)findViewById(R.id.editText);
-
-        //ПЕРВОЕ ОКОШКО(ВОЗВРАЩАЕТ НА ГЛАВНЫЙ ЭКРАН)
-
-        if (textView.getText() == getString(R.string.WorkDayBegin)) {
-            Intent intent = new Intent(SettingActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-
-        //ВВОД КОНЦА РАБОЧЕГО ДНЯ(ПЕРЕХОД К НАЧАЛУ РАБОЧЕГО ДНЯ)
-
-        if (textView.getText() == getString(R.string.WorkDayEnd)) {
-            textView.setText(getString(R.string.WorkDayBegin));
-            Sec2HM(workDayBegin);
-        }
-
-        //ВВОД НАЧАЛА ОБЕДА(ПЕРЕХОД К КОНЦУ РАБОЧЕГО ДНЯ)
-
-        if (textView.getText() == getString(R.string.LunchBegin)) {
-            textView.setText(getString(R.string.WorkDayEnd));
-            Sec2HM(workDayEnd);
-        }
-
-        //ВВОД КОНЦА ОБЕДА(ПЕРЕХОД К НАЧАЛУ ОБЕДА)
-
-        if (textView.getText() == getString(R.string.LunchEnd)){
-            textView.setText(getString(R.string.LunchBegin));
-            Sec2HM(lunchBegin);
-        }
-
-        //ВВОД ДНЯ АВАНСА(ПЕРЕХОД К КОНЦУ ОБЕДА)
-
-        if (textView.getText() == getString(R.string.DayPrepay)) {
-            textView.setText(getString(R.string.LunchEnd));
-            editText.setVisibility(View.INVISIBLE);
-            timePicker.setVisibility(View.VISIBLE);
-            Sec2HM(lunchEnd);
-        }
-
-        //ВВОД ДНЯ ЗАРПЛАТЫ(ПЕРЕХОД КО ДНЮ АВАНСА)
-
-        if (textView.getText() == getString(R.string.DaySalary)) {
-            textView.setText(getString(R.string.DayPrepay));
-            editText.setText(String.valueOf(dayPrepay));
-        }
-
-        //ВВОД ЗАРПЛАТЫ(ПЕРЕХОД К ДНЮ ЗАРПЛАТЫ)
-
-        if (textView.getText() == getString(R.string.Salary)) {
-            textView.setText(getString(R.string.DaySalary));
-            editText.setText(String.valueOf(daySalary));
-        }
     }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
@@ -225,6 +237,7 @@ public class SettingActivity extends Activity {
         edit.putInt(PREFERENCE_DAY_PREPAY, dayPrepay);
         edit.putInt(PREFERENCE_DAY_SALARY, daySalary);
         edit.putFloat(PREFERENCE_SALARY, salary);
+        edit.putBoolean(PREFERENCE_KEYDEF, bufKey);
         edit.apply();
     }
 
@@ -239,6 +252,7 @@ public class SettingActivity extends Activity {
         dayPrepay = setting.getInt(PREFERENCE_DAY_PREPAY, 0);
         daySalary = setting.getInt(PREFERENCE_DAY_SALARY, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
+        bufKey = setting.getBoolean(PREFERENCE_KEYDEF, false);
     }
 
     //ПРОЦЕДУРА СБРОСА НАСТРОЕК
@@ -252,6 +266,7 @@ public class SettingActivity extends Activity {
         edit.putInt(PREFERENCE_DAY_PREPAY, 15);
         edit.putInt(PREFERENCE_DAY_SALARY, 1);
         edit.putFloat(PREFERENCE_SALARY, 10000);
+        edit.putBoolean(PREFERENCE_KEYDEF, false);
         edit.apply();
     }
 

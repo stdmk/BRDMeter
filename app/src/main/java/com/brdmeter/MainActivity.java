@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     long minInTimer;                //минут по таймеру
     long hourInTimer;               //часов по таймеру
     long timeNow;                   //время сейчас
-    boolean keyStart;               //ключ, что была нажата кнопка старт
+    boolean keyStart = false;       //ключ, что была нажата кнопка старт
+    boolean keyDef = false;         //настройки по умолчанию?
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public final String PREFERENCE_TEMP_MIN = "tempmin";                  //временно минут
     public final String PREFERENCE_TEMP_SEC = "tempsec";                  //временно секунд
     public final String PREFERENCE_HIDE_TIME = "hidetime";                //время перед сворачиванием
+    public final String PREFERENCE_KEYDEF = "keydef";                     //были ли изменены настройки
 
     private SharedPreferences setting;
 
@@ -87,15 +89,17 @@ public class MainActivity extends AppCompatActivity {
         lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
+        keyDef = setting.getBoolean(PREFERENCE_KEYDEF, false);
 
         timeNow = System.currentTimeMillis() / 1000;   //текущее время
 
-        if (salary != 0 ) {                                                             //если зарплата не пустая - всё нормально, работаем
+        if (keyDef) {                                                             //настройки были изменены, всё нормально, работаем
             textTotalTime.setText(CalcTotalTime());
             textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
         } else {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
+            finish();
         }
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
@@ -238,9 +242,8 @@ public class MainActivity extends AppCompatActivity {
             mainTimer.cancel();
             hideTime = System.currentTimeMillis() / 1000;
             SaveTempData();
+            finish();
         }
-
-        finish();
     }
 
     //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
@@ -258,9 +261,8 @@ public class MainActivity extends AppCompatActivity {
             mainTimer.cancel();
             hideTime = System.currentTimeMillis() / 1000;
             SaveTempData();
+            finish();
         }
-
-        finish();
     }
 
     //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ"
@@ -329,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {           //кнопка настроек
+
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
             return true;
