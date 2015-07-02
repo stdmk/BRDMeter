@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (dayToday<calendar.get(Calendar.DAY_OF_MONTH)){              //обнуляет статистику "На сегодня"
             dayToday = calendar.get(Calendar.DAY_OF_MONTH);
+            totalTime = 0;
+            totalMoney = 0;
 
             SharedPreferences.Editor edit = setting.edit();
             edit.putLong(PREFERENCE_ALL_TIME, allTime + totalTime);

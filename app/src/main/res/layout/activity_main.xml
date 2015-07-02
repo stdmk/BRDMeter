@@ -7,19 +7,19 @@
         android:layout_height="wrap_content"
         android:text="@string/btnStart"
         android:id="@+id/buttonStart"
-        android:layout_alignTop="@+id/buttonStop"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/progressBar"
+        android:layout_toLeftOf="@+id/textView6"
+        android:layout_toStartOf="@+id/textView6" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btnStop"
         android:id="@+id/buttonStop"
-        android:layout_below="@+id/progressBar"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
-        android:layout_marginTop="61dp" />
+        android:layout_above="@+id/textView"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +29,8 @@
         android:id="@+id/textView"
         android:layout_marginTop="72dp"
         android:layout_below="@+id/buttonStart"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="22dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,7 +40,8 @@
         android:id="@+id/textView2"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        android:layout_marginTop="52dp"
+        android:textSize="22dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,8 +49,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView3"
         android:text="@string/MoneyCounter"
-        android:layout_marginTop="46dp"
-        android:layout_alignTop="@+id/textView6"
+        android:layout_marginTop="25dp"
+        android:textSize="22dp"
+        android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -57,7 +60,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/TimeCounter"
         android:id="@+id/textView6"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="84dp"
+        android:textSize="25dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
