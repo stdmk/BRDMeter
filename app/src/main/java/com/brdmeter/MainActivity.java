@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
 
         if (keyDef) {                                                             //настройки не дефолтные, всё нормально, работаем
-            textTotalTime.setText(CalcTotalTime(totalTime));
+            textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
             textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
         } else {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
 
-                textTotalTime.setText(CalcTotalTime(totalTime));
+                textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
 
                 textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
                 textMoneyCounter.setText("0.0 (руб.)");
@@ -230,6 +230,17 @@ public class MainActivity extends AppCompatActivity {
                 keyStart = false;
 
                 SaveTotalData();
+            }
+        });
+
+        //НАЖАТИЕ НА ПРОГРЕСС-БАР
+
+        progressBar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int buf = progressBar.getMax() - progressBar.getProgress();
+                Toast toast = Toast.makeText(getApplicationContext(), "До конца рабочего дня "+CalcTotalTime(buf), Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
@@ -301,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ СЕГОДНЯ"
+    //ПРОЦЕДУРА ПЕРЕВОДА СЕКУНД В ЧАСЫ МИНУТЫ И СЕКУНДЫ
 
     public String CalcTotalTime(long bufSec) {
 
@@ -316,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
             bufHour = bufMin/60;
             bufMin = bufMin % 60;
         }
-        return "Всего времени: "+String.valueOf(bufHour)+" ч. "+String.valueOf(bufMin)+ " м. "+String.valueOf(bufSec)+" с.";
+        return String.valueOf(bufHour)+" ч. "+String.valueOf(bufMin)+ " м. "+String.valueOf(bufSec)+" с.";
     }
 
     //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
@@ -416,8 +427,18 @@ public class MainActivity extends AppCompatActivity {
 
             //СТАТИСТИКА ВСЕГО ВРЕМЕНИ И ДЕНЕГ ВООБЩЕ
 
-            buf = buf + CalcTotalTime(allTime + totalTime) + "\n";
+            buf = buf + "Всего времени: " + CalcTotalTime(allTime + totalTime) + "\n";
             buf = buf + "Всего денег (руб): " + Math.round(allMoney + totalMoney) + "\n";
+
+            //ФОРМИРОВАНИЕ РАДОСТНОГО СООБЩЕНИЯ
+
+            if (dayToday == dayPrepay) {
+                buf = buf + "СЕГОДНЯ АВАНС! :) \n";
+            }
+
+            if (dayToday == daySalary) {
+                buf = buf + "СЕГОДНЯ ЗАРПЛАТА! :) \n";
+            }
 
             //ФОРМИРОВАНИЕ СТРОКИ И ВЫВОД
 
