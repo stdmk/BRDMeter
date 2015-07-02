@@ -3,6 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_setting">Настройки</string>
+    <string name="title_activity_statistic">Статистика</string>
     <string name="btnStart">Старт</string>
     <string name="btnStop">Стоп</string>
     <string name="AllTime">Всего времени: 0 ч. 0 м. 0 с.</string>

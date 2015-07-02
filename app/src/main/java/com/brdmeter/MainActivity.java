@@ -23,10 +23,15 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
 
-    long totalTime = 0;             //всего времени
+    long totalTime = 0;             //всего времени сегодня
+    long allTime = 0;               //всего времени вообще
     long bufTime = 0;                //счётчик секунд
-    float totalMoney = 0;           //всего денег
+    float totalMoney = 0;           //всего денег сегодня
+    float allMoney = 0;             //всего денег вообще
     float bufMoney = 0;             //счётчик копеек
+    int dayToday = 0;               //сегодняшний день
+    int dayPrepay;                  //день аванса
+    int daySalary;                  //день зарплаты
     float salary = 23000;           //зарплата
     float countDayInMonth = 30;     //рабочих дней в месяце
     float countHoursIntDay = 8;     //рабочих часов в день
@@ -45,14 +50,20 @@ public class MainActivity extends AppCompatActivity {
     long timeNow;                   //время сейчас
     boolean keyStart = false;       //ключ, что была нажата кнопка старт
     boolean keyDef = false;         //настройки по умолчанию?
+    float brdm;                     //скучность времени
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
-    public final String PREFERENCE_TOTAL_TIME = "totaltime";             //параметр настроек Всего времени
-    public final String PREFERENCE_TOTAL_MONEY = "totalmoney";            //параметр настроек Всего денег
+    public final String PREFERENCE_TOTAL_TIME = "totaltime";             //Всего времени сегодня
+    public final String PREFERENCE_ALL_TIME = "alltime";                 //всего времени вообще
+    public final String PREFERENCE_TOTAL_MONEY = "totalmoney";            //Всего денег
+    public final String PREFERENCE_ALL_MONEY = "allmoney";                //Всего денег вообще
+    public final String PREFERENCE_DAY_TODAY = "daytoday";                //сегодняшний день. Необходимо для учитывания статистики всего или сегодня
     public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
     public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
     public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
+    public final String PREFERENCE_DAY_PREPAY = "dayprepay";              //день аванса
+    public final String PREFERENCE_DAY_SALARY = "daysalary";              //день зарплаты
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
     public final String PREFERENCE_TEMP_TIME = "temptime";                //временное время
     public final String PREFERENCE_TEMP_MONEY = "tempmoney";              //временные деньги(когда приложение сворачивается)
@@ -83,24 +94,48 @@ public class MainActivity extends AppCompatActivity {
 
         setting = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);                           //подключаемся к настройкам
         totalTime = setting.getLong(PREFERENCE_TOTAL_TIME, 0);
+        allTime = setting.getLong(PREFERENCE_ALL_TIME, 0);
         totalMoney = setting.getFloat(PREFERENCE_TOTAL_MONEY, 0);
+        allMoney = setting.getFloat(PREFERENCE_ALL_MONEY, 0);
+        dayToday = setting.getInt(PREFERENCE_DAY_TODAY, 0);
         workDayBegin = setting.getInt(PREFERENCE_WORKDAY_BEGIN, 0);         //берём настройки из файла
         workDayEnd = setting.getInt(PREFERENCE_WORKDAY_END, 0);
         lunchBegin = setting.getInt(PREFERENCE_LUNCH_BEGIN, 0);
         lunchEnd = setting.getInt(PREFERENCE_LUNCH_END, 0);
+        dayPrepay = setting.getInt(PREFERENCE_DAY_PREPAY, 0);
+        daySalary = setting.getInt(PREFERENCE_DAY_SALARY, 0);
         salary = setting.getFloat(PREFERENCE_SALARY, 0);
         tempMoney = setting.getFloat(PREFERENCE_TEMP_MONEY, 0);
         keyDef = setting.getBoolean(PREFERENCE_KEYDEF, false);
 
         timeNow = System.currentTimeMillis() / 1000;   //текущее время
 
-        if (keyDef) {                                                             //настройки были изменены, всё нормально, работаем
-            textTotalTime.setText(CalcTotalTime());
+        Calendar calendar = Calendar.getInstance();
+
+        if (keyDef) {                                                             //настройки не дефолтные, всё нормально, работаем
+            textTotalTime.setText(CalcTotalTime(totalTime));
             textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
         } else {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
             finish();
+        }
+
+        if (dayToday == 0) {
+            dayToday = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+
+        if (dayToday<calendar.get(Calendar.DAY_OF_MONTH)){              //обнуляет статистику "На сегодня"
+            dayToday = calendar.get(Calendar.DAY_OF_MONTH);
+
+            SharedPreferences.Editor edit = setting.edit();
+            edit.putLong(PREFERENCE_ALL_TIME, allTime + totalTime);
+            edit.putFloat(PREFERENCE_ALL_MONEY, allMoney + totalMoney);
+            edit.putInt(PREFERENCE_DAY_TODAY, dayToday);
+            edit.apply();
+
+            textTotalTime.setText("Всего времени: 0 ч. 0 м. 0 с.");
+            textTotalMoney.setText("Всего денег(руб): ");
         }
 
         tickInMoney = salary / countDayInMonth / countHoursIntDay / 60 / 60;    //подсчёт денег в секунду
@@ -145,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
             btnStop.setEnabled(false);
         }
 
-        Calendar calendar = Calendar.getInstance();
         int buf = (calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
         buf = buf - workDayBegin;
         progressBar.setMax(workDayEnd - workDayBegin);
@@ -181,8 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 btnStart.setEnabled(true);
                 btnStop.setEnabled(false);
 
-                textTotalTime.setText(CalcTotalTime());
-                textTotalTime.setText(CalcTotalTime());
+                textTotalTime.setText(CalcTotalTime(totalTime));
 
                 textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
                 textMoneyCounter.setText("0.0 (руб.)");
@@ -266,11 +299,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ"
+    //ПРОЦЕДУРА ПОДСЧЁТА "ВСЕГО ВРЕМЕНИ СЕГОДНЯ"
 
-    public String CalcTotalTime() {
+    public String CalcTotalTime(long bufSec) {
 
-        long bufSec = totalTime;
         long bufMin = 0;
         long bufHour = 0;
 
@@ -341,6 +373,54 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
+        }
+
+        if (id == R.id.action_statistic) {          //кнопка статистики
+            final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            final TextView testText = (TextView) findViewById(R.id.textView7);
+
+            String buf;
+
+            //РАССЧЁТ СКУЧНОСТИ ДНЯ
+            totalTime = totalTime + (hourInTimer * 60 * 60 + minInTimer * 60 + secInTimer);
+            brdm = ((float)totalTime / (float)progressBar.getProgress()) * 100;                 //подсчёт скучности дня
+
+            buf = "Скучность дня: "+ String.valueOf((int) brdm) + "%" + "\n";
+
+            //РАССЧЁТ ДНЕЙ ДО АВАНСА И ЗАРПЛАТЫ
+
+            Calendar calendar = Calendar.getInstance();
+            int dayInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);  //дней в месяце
+            int currDayMonth = calendar.get(Calendar.DAY_OF_MONTH);             //сегодняшний день
+            int bufDays2;   //дней до ...
+
+            if (currDayMonth < dayPrepay) {                         //если сегодняшний день < дня аванса
+                bufDays2 = dayPrepay - currDayMonth;      //просто вычитаем из дня аванса сегодняшний
+            }
+            else {
+                bufDays2 = dayInMonth - currDayMonth + dayPrepay; //иначе узнаём разницу до конца месяца + число дней до аванса
+            }
+
+            buf = buf + "Дней до аванса: " + String.valueOf(bufDays2) + "\n";
+
+            if (currDayMonth < daySalary) {
+                bufDays2 = daySalary - currDayMonth;
+            }
+            else {
+                bufDays2 = dayInMonth - currDayMonth + daySalary;
+            }
+
+            buf = buf + "Дней до зарплаты: " + String.valueOf(bufDays2) + "\n";
+
+            //СТАТИСТИКА ВСЕГО ВРЕМЕНИ И ДЕНЕГ ВООБЩЕ
+
+            buf = buf + CalcTotalTime(allTime + totalTime) + "\n";
+            buf = buf + "Всего денег (руб): " + Math.round(allMoney + totalMoney) + "\n";
+
+            //ФОРМИРОВАНИЕ СТРОКИ И ВЫВОД
+
+            Toast toast = Toast.makeText(getApplicationContext(), buf, Toast.LENGTH_LONG);
+            toast.show();
         }
 
         return super.onOptionsItemSelected(item);

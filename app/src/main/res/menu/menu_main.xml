@@ -6,4 +6,9 @@
         android:title="@string/title_activity_setting"
         android:icon="@drawable/ic_settings_applications_white_48dp"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_statistic"
+        android:title="@string/title_activity_statistic"
+        android:icon="@drawable/ic_assessment_white_48dp"
+        app:showAsAction="always"/>
 </menu>
