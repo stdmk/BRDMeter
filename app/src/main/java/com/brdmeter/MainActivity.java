@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     boolean keyStart = false;       //ключ, что была нажата кнопка старт
     boolean keyDef = false;         //настройки по умолчанию?
     float brdm;                     //скучность времени
+    int timeKey;
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //Всего времени сегодня
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public final String PREFERENCE_WORKDAY_BEGIN = "workdaybegin";          //время начала рабочего дня
     public final String PREFERENCE_WORKDAY_END = "workdayend";            //время конца рабочего дня
     public final String PREFERENCE_LUNCH_BEGIN = "lunchbegin";            //время начала обеда
-    public final String PREFERENCE_LUNCH_END = "lunchbegin";              //время конца обеда
+    public final String PREFERENCE_LUNCH_END = "lunchend";              //время конца обеда
     public final String PREFERENCE_DAY_PREPAY = "dayprepay";              //день аванса
     public final String PREFERENCE_DAY_SALARY = "daysalary";              //день зарплаты
     public final String PREFERENCE_SALARY = "salary";                     //зарплата
@@ -253,28 +254,47 @@ public class MainActivity extends AppCompatActivity {
             final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
             final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
             final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);  //прогресс-бар
+            final TextView testText = (TextView) findViewById(R.id.textView7);
 
-            secInTimer = secInTimer +1;
-            if (secInTimer == 60) {
-                secInTimer = 0;
-                minInTimer = minInTimer + 1;            //увеличение секунд, минут, часов
-                if (minInTimer == 60) {
-                    minInTimer = 0;
-                    hourInTimer = hourInTimer + 1;
+            final int bufTime;
+            Calendar calendar = Calendar.getInstance();
+            bufTime = (calendar.get(Calendar.HOUR) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
+
+            if (bufTime>lunchBegin && bufTime<lunchEnd) {
+                timeKey = 1;
+            } else {
+
+                secInTimer = secInTimer + 1;
+                if (secInTimer == 60) {
+                    secInTimer = 0;
+                    minInTimer = minInTimer + 1;            //увеличение секунд, минут, часов
+                    if (minInTimer == 60) {
+                        minInTimer = 0;
+                        hourInTimer = hourInTimer + 1;
+                    }
                 }
+
+                bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
+                timeKey = 0;
             }
 
-            bufMoney = bufMoney + tickInMoney;    //увеличиваются копейки
-
             runOnUiThread(new Runnable() {      //доступ к изменению компонентов
-                @Override
-                public void run() {
-                    textMoneyCounter.setText(String.format("%.2f", bufMoney)+ " (руб.)");      //отображается увеличение копеек
-                    textTimeCounter.setText(String.format("%02d", hourInTimer)+":"
-                            +String.format("%02d", minInTimer)+":"                  //отображается изменение таймера
-                            +String.format("%02d", secInTimer));
-                    progressBar.setProgress(progressBar.getProgress()+1);
+            @Override
+            public void run() {
+                switch (timeKey) {
+                    case 0:
+                        textMoneyCounter.setText(String.format("%.2f", bufMoney) + " (руб.)");      //отображается увеличение копеек
+                        textTimeCounter.setText(String.format("%02d", hourInTimer) + ":"
+                                + String.format("%02d", minInTimer) + ":"                  //отображается изменение таймера
+                                + String.format("%02d", secInTimer));
+                        progressBar.setProgress(progressBar.getProgress() + 1);
+                        break;
+                    
+                    case 1:
+                        textMoneyCounter.setText("Время обеда!");
+                        break;
                 }
+            }
             });
         }
     }
