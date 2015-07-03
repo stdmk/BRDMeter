@@ -239,9 +239,12 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                int buf = progressBar.getMax() - progressBar.getProgress();
-                Toast toast = Toast.makeText(getApplicationContext(), "До конца рабочего дня "+CalcTotalTime(buf), Toast.LENGTH_SHORT);
-                toast.show();
+                bufTime = TimeNowSec();
+                if (bufTime>workDayBegin && bufTime <workDayEnd) {
+                    int buf = progressBar.getMax() - progressBar.getProgress();
+                    Toast toast = Toast.makeText(getApplicationContext(), "До конца рабочего дня " + CalcTotalTime(buf), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
     }
@@ -262,7 +265,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (bufTime>lunchBegin && bufTime<lunchEnd) {
                 timeKey = 1;
-            } else {
+            }
+            else if (bufTime < workDayBegin) {
+                timeKey = 2;
+            }
+            else if (bufTime > workDayEnd) {
+                timeKey = 3;
+            }
+            else {
 
                 secInTimer = secInTimer + 1;
                 if (secInTimer == 60) {
@@ -289,10 +299,19 @@ public class MainActivity extends AppCompatActivity {
                                 + String.format("%02d", secInTimer));
                         progressBar.setProgress(progressBar.getProgress() + 1);
                         break;
-                    
+
                     case 1:
                         textMoneyCounter.setText("Время обеда!");
                         break;
+
+                    case 2:
+                        textMoneyCounter.setText("Рабочий день не начался");
+                        Toast toast = Toast.makeText(getApplicationContext(), "До начала рабочего дня" + CalcTotalTime(workDayBegin - bufTime), Toast.LENGTH_SHORT);
+                        toast.show();
+                        break;
+
+                    case 3:
+                        textMoneyCounter.setText("Рабочий день окончен");
                 }
             }
             });
@@ -330,52 +349,6 @@ public class MainActivity extends AppCompatActivity {
             SaveTempData();
             finish();
         }
-    }
-
-    //ПРОЦЕДУРА ПЕРЕВОДА СЕКУНД В ЧАСЫ МИНУТЫ И СЕКУНДЫ
-
-    public String CalcTotalTime(long bufSec) {
-
-        long bufMin = 0;
-        long bufHour = 0;
-
-        if (bufSec>=60) {
-            bufMin = bufSec/60;
-            bufSec = bufSec % 60;
-        }                                                       //подсчёт сколько прошло минут или даже часов
-        if (bufMin>=60) {
-            bufHour = bufMin/60;
-            bufMin = bufMin % 60;
-        }
-        return String.valueOf(bufHour)+" ч. "+String.valueOf(bufMin)+ " м. "+String.valueOf(bufSec)+" с.";
-    }
-
-    //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
-
-    public void SaveTotalData(){
-        SharedPreferences.Editor edit = setting.edit();
-        edit.putLong(PREFERENCE_TOTAL_TIME, totalTime);
-        edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
-        edit.putLong(PREFERENCE_TEMP_TIME, 0);
-        edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
-        edit.putLong(PREFERENCE_TEMP_HOUR, 0);
-        edit.putLong(PREFERENCE_TEMP_MIN, 0);
-        edit.putLong(PREFERENCE_TEMP_SEC, 0);
-        edit.apply();
-    }
-
-    //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ДАННЫХ
-
-    public void SaveTempData () {
-
-        SharedPreferences.Editor edit = setting.edit();
-        edit.putLong(PREFERENCE_TEMP_TIME, bufTime);
-        edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
-        edit.putLong(PREFERENCE_TEMP_HOUR, hourInTimer);
-        edit.putLong(PREFERENCE_TEMP_MIN, minInTimer);
-        edit.putLong(PREFERENCE_TEMP_SEC, secInTimer);
-        edit.putLong(PREFERENCE_HIDE_TIME, hideTime);
-        edit.apply();
     }
 
     //TOOLBAR
@@ -468,4 +441,58 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //ПРОЦЕДУРА ПЕРЕВОДА СЕКУНД В ЧАСЫ МИНУТЫ И СЕКУНДЫ
+
+    public String CalcTotalTime(long bufSec) {
+
+        long bufMin = 0;
+        long bufHour = 0;
+
+        if (bufSec>=60) {
+            bufMin = bufSec/60;
+            bufSec = bufSec % 60;
+        }                                                       //подсчёт сколько прошло минут или даже часов
+        if (bufMin>=60) {
+            bufHour = bufMin/60;
+            bufMin = bufMin % 60;
+        }
+        return String.valueOf(bufHour)+" ч. "+String.valueOf(bufMin)+ " м. "+String.valueOf(bufSec)+" с.";
+    }
+
+    //ПРОЦЕДУРА СОХРАНЕНИЯ ДАННЫХ
+
+    public void SaveTotalData(){
+        SharedPreferences.Editor edit = setting.edit();
+        edit.putLong(PREFERENCE_TOTAL_TIME, totalTime);
+        edit.putFloat(PREFERENCE_TOTAL_MONEY, totalMoney);
+        edit.putLong(PREFERENCE_TEMP_TIME, 0);
+        edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
+        edit.putLong(PREFERENCE_TEMP_HOUR, 0);
+        edit.putLong(PREFERENCE_TEMP_MIN, 0);
+        edit.putLong(PREFERENCE_TEMP_SEC, 0);
+        edit.apply();
+    }
+
+    //ПРОЦЕДУРА СОХРАНЕНИЯ ВРЕМЕННЫХ ДАННЫХ
+
+    public void SaveTempData () {
+
+        SharedPreferences.Editor edit = setting.edit();
+        edit.putLong(PREFERENCE_TEMP_TIME, bufTime);
+        edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
+        edit.putLong(PREFERENCE_TEMP_HOUR, hourInTimer);
+        edit.putLong(PREFERENCE_TEMP_MIN, minInTimer);
+        edit.putLong(PREFERENCE_TEMP_SEC, secInTimer);
+        edit.putLong(PREFERENCE_HIDE_TIME, hideTime);
+        edit.apply();
+    }
+
+    //ФУНКЦИЯ ВОЗВРАЩАЕТ ТЕКУЩЕЕ ВРЕМЯ В СЕКУНДАХ
+
+    public int TimeNowSec() {
+        Calendar calendar = Calendar.getInstance();
+        return (calendar.get(Calendar.HOUR) * 60 * 60) + (calendar.get(Calendar.MINUTE) * 60) + calendar.get(Calendar.SECOND);
+    }
+
 }
