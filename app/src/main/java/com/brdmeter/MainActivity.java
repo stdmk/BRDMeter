@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -112,16 +113,11 @@ public class MainActivity extends AppCompatActivity {
         keyDef = setting.getBoolean(PREFERENCE_KEYDEF, false);
         keyMinimize = setting.getBoolean(PREFERENCE_KEYMINIMIZE, false);
 
-        timeNow = System.currentTimeMillis() / 1000;   //текущее время
+        timeNow = TimeNowSec();   //текущее время
 
         Calendar calendar = Calendar.getInstance();
 
-        int timeNowNormal = TimeNowSec();
-
-        if (keyDef) {                                                             //настройки не дефолтные, всё нормально, работаем
-            textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
-            textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
-        } else {
+        if (!keyDef){
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
             finish();
@@ -154,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             secCounter = setting.getLong(PREFERENCE_TEMP_TIME, 0);          //значение насчитанных секунд перед сворачиванем
             hideTime = setting.getLong(PREFERENCE_HIDE_TIME, 0);            //время в секундах, когда приложение было свёрнуто
 
-            if (timeNowNormal < workDayEnd) {
+            if (timeNow < workDayEnd) {   //если рабочий день ещё идёт
                 secInTimer = secCounter + (timeNow - hideTime);              //значение сколько секунд приложение было свёрнуто+сколько насчитало перед сворачиванием
 
                 bufMoney = bufMoney + (tickInMoney * secInTimer);   //подсчёт копеек, которые прибавились, пока приложение было свёрнуто
@@ -176,13 +172,11 @@ public class MainActivity extends AppCompatActivity {
                 btnStart.setEnabled(false);
                 btnStop.setEnabled(true);
 
-                ResetTempData();
-
                 mainTimerTask = new MainTimerTask();
                 mainTimer.schedule(mainTimerTask, 1000, 1000);      //запуск таймера
             }
-            else {
-                secInTimer = secCounter + (((timeNow + workDayEnd) - hideTime));              //значение сколько секунд приложение было свёрнуто+сколько насчитало перед сворачиванием
+            else {  //если рабочий день закончился
+                secInTimer = secCounter + (workDayEnd - hideTime);              //значение сколько секунд приложение было свёрнуто+сколько насчитало перед сворачиванием
 
                 bufMoney = bufMoney + (tickInMoney * secInTimer);            //подсчёт копеек, которые прибавились, пока приложение было свёрнуто
 
@@ -195,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                     minInTimer = minInTimer % 60;
                 }
 
-                totalTime = TimerSecValue();
+                totalTime = totalTime + TimerSecValue();
 
                 totalMoney = totalMoney + bufMoney;
 
@@ -209,9 +203,8 @@ public class MainActivity extends AppCompatActivity {
                 hourInTimer = 0;
 
                 btnStop.setEnabled(false);
-                textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
-                textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
 
+                keyMinimize = false;
                 ResetTempData();
 
                 btnStart.setEnabled(true);
@@ -222,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
                 mainTimer = new Timer();
 
                 keyStart = false;
+                Toast toast = Toast.makeText(getApplicationContext(), "Похоже вы забыли остановить отсчёт" + "\n" + "Скукометр остановлен, время подсчитано", Toast.LENGTH_SHORT);
+                toast.show();
             }
         } else {
             secInTimer = 0;
@@ -234,6 +229,9 @@ public class MainActivity extends AppCompatActivity {
         buf = buf - workDayBegin;
         progressBar.setMax(workDayEnd - workDayBegin);
         progressBar.setProgress(buf);           //установки прогресс-бара
+
+        textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
+        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
 
         //КНОПКА СТАРТ
 
@@ -253,31 +251,7 @@ public class MainActivity extends AppCompatActivity {
         btnStop.setOnClickListener(new OnClickListener() {              //Кнопка стоп
             @Override
             public void onClick(View v) {
-                mainTimer.cancel();         //стоп таймера
-                mainTimer = null;
-                mainTimer = new Timer();
-
-                totalTime = totalTime + TimerSecValue();    //всего времени подсчёт
-                totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
-
-                textTimeCounter.setText("00:00:00");    //обнуляем вывод таймера
-
-                btnStart.setEnabled(true);
-                btnStop.setEnabled(false);
-
-                textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
-
-                textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
-                textMoneyCounter.setText("0.0 (руб.)");
-
-                secCounter = 0;
-                bufMoney = 0;
-                secInTimer = 0;
-                minInTimer = 0;
-                hourInTimer = 0;
-                keyStart = false;
-
-                SaveTotalData();
+                StopTimer();
             }
         });
 
@@ -303,8 +277,6 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
             final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
-            final TextView textTotalTime = (TextView) findViewById(R.id.textView);      //вывод всего времени
-            final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
             final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
             final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
             final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);  //прогресс-бар
@@ -367,6 +339,16 @@ public class MainActivity extends AppCompatActivity {
                     case 3:
                         toast = Toast.makeText(getApplicationContext(), "Рабочий день окончен", Toast.LENGTH_SHORT);
                         toast.show();
+                        if (keyMinimize) {
+                            mainTimer.cancel();         //стоп таймера
+                            mainTimer = null;
+                            mainTimer = new Timer();
+                            btnStart.setEnabled(true);
+                            btnStop.setEnabled(false);
+                            keyStart = false;
+                        } else {
+                            StopTimer();
+                        }
                         break;
                 }
             }
@@ -380,17 +362,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+        keyMinimize = true;
         if (keyStart) {
             mainTimer.cancel();
-            hideTime = System.currentTimeMillis() / 1000;
+            hideTime = TimeNowSec();
             secCounter = TimerSecValue();
             SaveTempData();
             finish();
-        }
-        else
-        {
-            SaveTotalData();
-            SaveAllData();
         }
     }
 
@@ -406,16 +384,13 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
+        keyMinimize = true;
         if (keyStart) {
             mainTimer.cancel();
-            hideTime = System.currentTimeMillis() / 1000;
+            hideTime = TimeNowSec();
             secCounter = TimerSecValue();
             SaveTempData();
             finish();
-        }
-        else {
-            SaveTotalData();
-            SaveAllData();
         }
     }
 
@@ -551,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
     public void SaveTempData () {
 
         SharedPreferences.Editor edit = setting.edit();
-        edit.putBoolean(PREFERENCE_KEYMINIMIZE, true);
+        edit.putBoolean(PREFERENCE_KEYMINIMIZE, keyMinimize);
         edit.putLong(PREFERENCE_TEMP_TIME, secCounter);
         edit.putFloat(PREFERENCE_TEMP_MONEY, bufMoney);
         edit.putLong(PREFERENCE_TEMP_HOUR, hourInTimer);
@@ -565,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void ResetTempData() {
         SharedPreferences.Editor edit = setting.edit();
-        edit.putBoolean(PREFERENCE_KEYMINIMIZE, false);
+        edit.putBoolean(PREFERENCE_KEYMINIMIZE, keyMinimize);
         edit.putLong(PREFERENCE_TEMP_TIME, 0);
         edit.putFloat(PREFERENCE_TEMP_MONEY, 0);
         edit.putLong(PREFERENCE_TEMP_HOUR, 0);
@@ -596,6 +571,43 @@ public class MainActivity extends AppCompatActivity {
 
     public long TimerSecValue() {
         return (hourInTimer * 60 * 60) + (minInTimer * 60) + secInTimer;
+    }
+
+    //ПРОЦЕДУРА СТОПА ТАЙМЕРА
+    public void StopTimer () {
+        final Button btnStart = (Button) findViewById(R.id.buttonStart);            //кнопка старт
+        final Button btnStop = (Button) findViewById(R.id.buttonStop);              //кнопка стоп
+        final TextView textTotalTime = (TextView) findViewById(R.id.textView);      //вывод всего времени
+        final TextView textTotalMoney = (TextView) findViewById(R.id.textView2);    //вывод всего денег
+        final TextView textMoneyCounter = (TextView) findViewById(R.id.textView3);  //вывод счётчика времени
+        final TextView textTimeCounter = (TextView) findViewById(R.id.textView6);   //вывод счётчика копеек
+
+        mainTimer.cancel();         //стоп таймера
+        mainTimer = null;
+        mainTimer = new Timer();
+
+        totalTime = totalTime + TimerSecValue();    //всего времени подсчёт
+        totalMoney = totalMoney + bufMoney;     //всего денег подсчёт
+
+        textTimeCounter.setText("00:00:00");    //обнуляем вывод таймера
+
+        btnStart.setEnabled(true);
+        btnStop.setEnabled(false);
+
+        textTotalTime.setText("Всего времени: " + CalcTotalTime(totalTime));
+
+        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
+        textMoneyCounter.setText("0.0 (руб.)");
+
+        secCounter = 0;
+        bufMoney = 0;
+        secInTimer = 0;
+        minInTimer = 0;
+        hourInTimer = 0;
+        keyStart = false;
+
+        SaveTotalData();
+        SaveAllData();
     }
 
 }
