@@ -24,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     long totalTime = 0;             //всего времени сегодня
+    long totalTimeInTimer = 0;          //всего времени сегодня для вывода на таймер
     long allTime = 0;               //всего времени вообще
     long secCounter = 0;                //счётчик секунд
     float totalMoney = 0;           //всего денег сегодня
+    float totalMoneyInTimer = 0;
     float allMoney = 0;             //всего денег вообще
     float bufMoney = 0;             //счётчик копеек
     int dayToday = 0;               //сегодняшний день
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     boolean keyDef = false;         //настройки по умолчанию?
     float brdm;                     //скучность времени
     int timeKey;
-    boolean keyMinimize;
+    boolean keyMinimize;            //было ли приложение свёрнуто
 
     public static final String PREFERENCE = "preference";       //имя файла настроек
     public final String PREFERENCE_TOTAL_TIME = "totaltime";             //Всего времени сегодня
@@ -119,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
 
+        totalTimeInTimer = totalTime;
+
         if (!keyDef){
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);       //нет - заупускаем настройки
             startActivity(intent);
@@ -134,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
             preference.SaveAllData();
 
+            totalTimeInTimer = 0;
             totalTime = 0;
             totalMoney = 0;
 
@@ -197,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 totalTime = totalTime + secInTimer;
                 bufMoney = bufMoney + (tickInMoney * secInTimer);            //подсчёт копеек, которые прибавились, пока приложение было свёрнуто
 
+                totalMoneyInTimer = secInTimer + totalTime;
+
                 calcTime.InTimer();     //перевод секунд в минуты и часы на таймере
 
                 totalMoney = totalMoney + bufMoney;
@@ -235,8 +242,8 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setMax(workDayEnd - workDayBegin);
         progressBar.setProgress(buf);           //установки прогресс-бара
 
-        textTotalTime.setText("Всего времени: " + calcTime.InString(totalTime));
-        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
+        textTotalTime.setText("Всего времени: " + calcTime.InString(totalTimeInTimer));
+        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoneyInTimer * tickInMoney));
 
         //КНОПКА СТАРТ
 
@@ -363,24 +370,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //СВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        keyMinimize = true;
-        if (keyStart) {
-            CalcTime calcTime = new CalcTime();
-            Preference preference = new Preference();
-            mainTimer.cancel();
-            hideTime = calcTime.TimeNowSec();
-            secCounter = calcTime.TimerSecValue();
-            preference.SaveTempData();
-            finish();
-        }
-    }
-
     //РАЗВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
 
     @Override
@@ -388,21 +377,30 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    //СВОРАЧИВАНИЕ ПРИЛОЖЕНИЯ
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (keyStart) {
+            Preference preference = new Preference();
+            CalcTime calcTime = new CalcTime();
+            keyMinimize = true;
+            mainTimer.cancel();
+            hideTime = calcTime.TimeNowSec();
+            secCounter = calcTime.TimerSecValue();
+            preference.SaveTempData();
+        }
+        finish();
+    }
+
     //НАЖАТИЕ КНОПКИ НАЗАД
 
     public void onBackPressed() {
         super.onBackPressed();
 
-        keyMinimize = true;
-        if (keyStart) {
-            CalcTime calcTime = new CalcTime();
-            Preference preference = new Preference();
-            mainTimer.cancel();
-            hideTime = calcTime.TimeNowSec();
-            secCounter = calcTime.TimerSecValue();
-            preference.SaveTempData();
-            finish();
-        }
+        onPause();
     }
 
     //TOOLBAR
@@ -439,14 +437,13 @@ public class MainActivity extends AppCompatActivity {
             final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             final TextView testText = (TextView) findViewById(R.id.textView7);
 
-            String buf = "";
+            String buf = ""; brdm = 0;
 
             //РАССЧЁТ СКУЧНОСТИ ДНЯ
             CalcTime calcTime = new CalcTime();
             int bufTime = calcTime.TimeNowSec();
             if (bufTime>workDayBegin && bufTime <workDayEnd) {
-                totalTime = totalTime + (hourInTimer * 60 * 60 + minInTimer * 60 + secInTimer);
-                brdm = ((float) totalTime / (float) progressBar.getProgress()) * 100;                 //подсчёт скучности дня
+                brdm = ((float) totalTime / (float) progressBar.getMax()) * 100;                 //подсчёт скучности дня
 
                 buf = "Скучность дня: " + String.valueOf((int) brdm) + "%" + "\n";
             }
@@ -478,8 +475,8 @@ public class MainActivity extends AppCompatActivity {
 
             //СТАТИСТИКА ВСЕГО ВРЕМЕНИ И ДЕНЕГ ВООБЩЕ
 
-            buf = buf + "Всего времени: " + calcTime.InString(allTime + totalTime) + "\n";
-            buf = buf + "Всего денег (руб): " + Math.round(allMoney + totalMoney) + "\n";
+            buf = buf + "Всего времени: " + calcTime.InString(allTime + calcTime.TimerSecValue()) + "\n";
+            buf = buf + "Всего денег (руб): " + Math.round(allMoney + bufMoney) + "\n";
 
             //ФОРМИРОВАНИЕ РАДОСТНОГО СООБЩЕНИЯ
 
@@ -598,8 +595,12 @@ public class MainActivity extends AppCompatActivity {
 
         void SaveAllData() {
             SharedPreferences.Editor edit = setting.edit();
-            edit.putLong(PREFERENCE_ALL_TIME, allTime + totalTime);
-            edit.putFloat(PREFERENCE_ALL_MONEY, allMoney + totalMoney);
+
+            allTime = allTime + totalTime;
+            allMoney = allMoney + totalMoney;
+
+            edit.putLong(PREFERENCE_ALL_TIME, allTime);
+            edit.putFloat(PREFERENCE_ALL_MONEY, allMoney);
             edit.putInt(PREFERENCE_DAY_TODAY, dayToday);
             edit.apply();
         }
@@ -618,6 +619,8 @@ public class MainActivity extends AppCompatActivity {
         CalcTime calcTime = new CalcTime();
         Preference preference = new Preference();
 
+        keyMinimize = false;
+
         mainTimer.cancel();         //стоп таймера
         mainTimer = null;
         mainTimer = new Timer();
@@ -630,20 +633,26 @@ public class MainActivity extends AppCompatActivity {
         btnStart.setEnabled(true);
         btnStop.setEnabled(false);
 
-        textTotalTime.setText("Всего времени: " + calcTime.InString(totalTime));
+        totalTimeInTimer = totalTimeInTimer + totalTime;
 
-        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalMoney));
+        textTotalTime.setText("Всего времени: " + calcTime.InString(totalTimeInTimer));
+
+        textTotalMoney.setText("Всего денег(руб): " + String.format("%.2f", totalTimeInTimer * tickInMoney));
         textMoneyCounter.setText("0.0 (руб.)");
 
-        secCounter = 0;
+        preference.ResetTempData();
+        preference.SaveTotalData();
+        preference.SaveAllData();
+
         bufMoney = 0;
         secInTimer = 0;
         minInTimer = 0;
         hourInTimer = 0;
         keyStart = false;
 
-        preference.SaveTotalData();
-        preference.SaveAllData();
+        totalTime = 0;
+        totalMoney = 0;
+
     }
 
 }
